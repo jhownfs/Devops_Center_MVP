@@ -1,0 +1,84 @@
+name: Validação de Qualidade
+run-name: ${{ github.actor }}
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - '*'
+    paths:
+        - 'force-app/**'
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+    branches:
+        - master
+        - Staging
+        - UAT
+    paths:
+        - 'force-app/**'
+      
+jobs:
+  quality-chekcks:
+    name: qualidade de código
+    runs-on: ubuntu-latest      
+    steps:
+    
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          
+      - name: Install CLI
+        run: |
+          npm install
+          npm install sfdx-cli --global
+      
+      - name: Install SFDX CLI Scanner
+        run: |
+          echo 'y' | sfdx plugins:install @salesforce/sfdx-scanner
+          
+      - name: Run SFDX CLI Scanner
+        run: |
+          sfdx scanner:run -f html -t "force-app" -e "eslint,retire-js,pmd,cpd" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-reports.html
+          
+      - uses: actions/upload-artifact@v3
+        with:
+          name: cli-scan-report
+          path: reports/scan-reports.html
+          
+#      - name: SonarCloud Scan
+#        uses: sonarsource/sonarcloud-github-action@master
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          
+#      - name: Install the JEST Plugin
+#        run: |
+          # npm install
+#          npm install @salesforce/sfdx-lwc-jest --save-dev
+          
+#      - name: 'Run Apex tests'
+#        run: sfdx force:apex:test:run -c -r human -d ./tests/apex -w 20 -u HubOrg
+        
+#      - name: 'Delete coverage file (temporary step)'
+#        run: rm ./tests/apex/test-result-707*-codecoverage.json
+    
+#      - name: 'Upload code coverage for Apex to Codecov.io'
+#        uses: codecov/codecov-action@v3
+#        with:
+#          token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
+#          flags: Apex
+      
+      - name: 'Lint Lightning Web Components'
+        run: |
+          # npm run lint:lwc
+          echo "Lint Lightning Web Components"
+        
+#      - name: Run the Jest coverage script
+#        if: github.event.pull_request.merged == true
+#        run: |
+#          npm run test:unit:coverage
+#          echo "Run the Jest coverage script"
