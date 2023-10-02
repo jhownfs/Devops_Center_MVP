@@ -1,0 +1,44 @@
+name: GitHub Actions DevOps Center
+run-name: ${{ github.actor }} is a test to Devops Center 
+on: 
+  push:
+    branches:
+      - SIT
+    paths:
+      - 'force-app/**'
+      
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🔎 O job irá iniciar assim que for enviado um item para a branch de SIT."
+      - name: Verificação do código no repositório
+        uses: actions/checkout@v3
+
+      - run: echo "💡 O ${{ github.repository }} O repositório foi clonado para o runner"
+      - run: echo "🖥️ O workflow agora está pronto para rodar"
+      - name: Listar todos os arquivos do repositório
+        run: |
+          ls ${{ github.workspace }}
+      - run: echo "🍏 O status to job é ${{ job.status }}."
+      
+  build:
+    runs-on: ubuntu-latest
+    environment: developer
+    steps:
+      # Checkout the Source code from the latest commit
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          
+      - name: Install NPM
+        run: |
+          npm install
+      # Install the SFDX CLI using npm command
+      - name: Install the SFDX CLI
+        run: |
+          npm install sfdx-cli --global
+          sfdx force --help
+      - name: Decrypt the server.key.enc file & store inside assets folder
+        run: |
+          openssl enc -nosalt -aes-256-cbc -d -in ${{ secrets.ENCRYPTION_KEY_FILE }} -out ${{ secrets.JWT_KEY_FILE }} -base64 -K ${{ secrets.DECRYPTION_KEY }} -iv ${{ secrets.DECRYPTION_IV }}
