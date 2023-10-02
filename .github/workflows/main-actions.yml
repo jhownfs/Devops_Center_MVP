@@ -30,12 +30,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
-          
-      - name: Install CLI
-        run: |
-          npm install
-          npm install sfdx-cli --global
-      
+            
       - name: Install SFDX CLI Scanner
         run: |
           echo 'y' | sfdx plugins:install @salesforce/sfdx-scanner
