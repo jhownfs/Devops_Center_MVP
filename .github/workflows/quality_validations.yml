@@ -45,7 +45,7 @@ jobs:
           
       - name: Rodar Scanner para Salesforce Apex
         run: |
-          sfdx scanner:run -f junit -t "force-app" -e "pmd" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-reports.junit
+          sfdx scanner:run -f junit -t "force-app" -e "pmd" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-reports.xml
           
       - uses: actions/upload-artifact@v3
         with:
