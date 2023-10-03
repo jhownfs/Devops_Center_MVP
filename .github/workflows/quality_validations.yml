@@ -2,18 +2,17 @@ name: Validação de Qualidade
 run-name: ${{ github.actor }}
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - '*'
     paths:
         - 'force-app/**'
   pull_request:
-    types: [opened, synchronize, reopened, closed]
     branches:
         - master
         - Staging
         - UAT
+        - SIT
     paths:
         - 'force-app/**'
       
@@ -30,12 +29,21 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
+
+      - name: Instalar o gerenciador de pacotes NPM
+        run: |
+          npm install
+
+      - name: Instalar the SFDX CLI
+        run: |
+          npm install sfdx-cli --global
+          sfdx force --help
             
-      - name: Install SFDX CLI Scanner
+      - name: Instalar o SFDX CLI Scanner
         run: |
           echo 'y' | sfdx plugins:install @salesforce/sfdx-scanner
           
-      - name: Run SFDX CLI Scanner
+      - name: Rodar Scanner para Salesforce
         run: |
           sfdx scanner:run -f html -t "force-app" -e "eslint,retire-js,pmd,cpd" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-reports.html
           
@@ -43,6 +51,15 @@ jobs:
         with:
           name: cli-scan-report
           path: reports/scan-reports.html
+
+      - name: Notificar usuários
+        uses: jdcargile/ms-teams-notification@v1.3
+        with:
+          github-token: ${{ github.token }}
+          ms-teams-webhook-uri: ${{ secrets.MS_TEAMS_WEBHOOK_URI }}
+          notification-summary:  Execução da esteira
+          notification-color: 17a2b8
+          timezone: America/Sao_Paulo
           
 #      - name: SonarCloud Scan
 #        uses: sonarsource/sonarcloud-github-action@master
