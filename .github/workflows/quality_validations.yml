@@ -45,13 +45,14 @@ jobs:
           
       - name: Rodar Scanner para Salesforce Apex
         run: |
-          sfdx scanner:run -f html -t "force-app" -e "pmd" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-reports.html
+          sfdx scanner:run -f junit -t "force-app" -e "pmd" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-reports.junit
           
       - uses: actions/upload-artifact@v3
         with:
           name: cli-scan-report
           path: reports/scan-reports.html
 
+          
       #- name: Notificar usuários
       #  uses: jdcargile/ms-teams-notification@v1.3
       #  with:
