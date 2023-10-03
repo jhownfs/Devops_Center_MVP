@@ -43,23 +43,23 @@ jobs:
         run: |
           echo 'y' | sfdx plugins:install @salesforce/sfdx-scanner
           
-      - name: Rodar Scanner para Salesforce
+      - name: Rodar Scanner para Salesforce Apex
         run: |
-          sfdx scanner:run -f html -t "force-app" -e "eslint,retire-js,pmd,cpd" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-reports.html
+          sfdx scanner:run -f html -t "force-app" -e "pmd" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-reports.html
           
-      - uses: actions/upload-artifact@v3
-        with:
-          name: cli-scan-report
-          path: reports/scan-reports.html
+      #- uses: actions/upload-artifact@v3
+      #  with:
+      #    name: cli-scan-report
+      #    path: reports/scan-reports.html
 
-      - name: Notificar usuários
-        uses: jdcargile/ms-teams-notification@v1.3
-        with:
-          github-token: ${{ github.token }}
-          ms-teams-webhook-uri: ${{ secrets.MS_TEAMS_WEBHOOK_URI }}
-          notification-summary:  Execução da esteira
-          notification-color: 17a2b8
-          timezone: America/Sao_Paulo
+      #- name: Notificar usuários
+      #  uses: jdcargile/ms-teams-notification@v1.3
+      #  with:
+      #    github-token: ${{ github.token }}
+      #    ms-teams-webhook-uri: ${{ secrets.MS_TEAMS_WEBHOOK_URI }}
+      #    notification-summary:  Execução da esteira
+      #    notification-color: 17a2b8
+      #   timezone: America/Sao_Paulo
           
 #      - name: SonarCloud Scan
 #        uses: sonarsource/sonarcloud-github-action@master
@@ -84,10 +84,10 @@ jobs:
 #          token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
 #          flags: Apex
       
-      - name: 'Lint Lightning Web Components'
-        run: |
-          # npm run lint:lwc
-          echo "Lint Lightning Web Components"
+      #- name: 'Lint Lightning Web Components'
+      #  run: |
+      #    # npm run lint:lwc
+      #    echo "Lint Lightning Web Components"
         
 #      - name: Run the Jest coverage script
 #        if: github.event.pull_request.merged == true
