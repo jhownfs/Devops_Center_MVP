@@ -1,7 +1,7 @@
 name: Validação de Qualidade
 run-name: ${{ github.actor }}
 
-on:
+ on:
   push:
     branches:
       - '*'
