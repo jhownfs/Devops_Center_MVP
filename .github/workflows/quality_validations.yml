@@ -70,11 +70,11 @@ jobs:
 #        with:
 #          paths: reports/scan-apex.xml
   
-  quality-Flow:  
+  quality-LWC:  
     name: Qualidade Flow
     runs-on: ubuntu-latest  
     outputs:
-      output1: ${{ steps.flow_status.outputs.outcome }}   
+      output1: ${{ steps.lwc_status.outputs.outcome }}   
     permissions:
       checks: write
       contents: read 
@@ -98,21 +98,27 @@ jobs:
 
       - name: Instalar o SFDX CLI Scanner
         run: |
-          echo 'y' | sfdx plugins:install lightning-flow-scanner  
+          echo 'y' | sfdx plugins:install @salesforce/sfdx-scanner
 
       - name: Validacao Flow
-        id: flow_status
+        id: lwc_status
         run: |
-          sfdx flow:scan -f 2 -d "force-app\main\default\flows" --json
+            sfdx scanner:run -f junit -s 3 --normalize-severity -t "force-app" -e "eslint" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-lwc.xml
+        continue-on-error: true
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: cli-scan-report
+          path: reports/scan-lwc.xml
 
   comunicacoes:
     name: Notificações e alertas
     runs-on: ubuntu-latest
-    needs: [quality-Apex, quality-Flow]
+    needs: [quality-Apex, quality-LWC]
     steps:
       
     - uses: ravsamhq/notify-slack-action@v2
-      if: ${{ needs.quality-Apex.outputs.output1 == 'failure' && needs.quality-Flow.outputs.output1 == 'failure'}}
+      if: ${{ needs.quality-Apex.outputs.output1 == 'failure' && needs.quality-LWC.outputs.output1 == 'failure'}}
       with:
           status: ${{ job.status }}
           token: ${{ github.token }}
