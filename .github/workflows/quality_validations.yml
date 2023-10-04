@@ -49,6 +49,11 @@ jobs:
         id: review_code
         run: |
           sfdx scanner:run -f junit -s 3 --normalize-severity -t "force-app" -e "pmd" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-apex.xml
+        continue-on-error: true
+
+      - name: Rodar Scanner para Salesforce Apex
+        id: code
+        run: |
           sfdx scanner:run -t "force-app" -e "pmd" -c "Design,Best Practices,Code Style,Performance,Security" -f table
         continue-on-error: true
 
@@ -59,7 +64,7 @@ jobs:
 
       - name: Requisicao para o time de segurança
         run: |
-          echo '${{ steps.review_code.outputs.status }}'
+          echo '${{ steps.code.outputs }}'
 
       - name: Publicar resultado dos testes sumarizado
         uses: mikepenz/action-junit-report@v4
