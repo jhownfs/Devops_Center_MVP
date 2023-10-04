@@ -44,19 +44,19 @@ jobs:
   
       - name: Rodar Scanner para Salesforce Apex
         run: |
-          sfdx scanner:run -f xml -t "force-app" -e "pmd" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-apex.xml
+          sfdx scanner:run -f junit -t "force-app" -e "pmd" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-apex.junit
             
       - uses: actions/upload-artifact@v3
         with:
           name: cli-scan-report
-          path: reports/scan-apex.xml
+          path: reports/scan-apex.junit
 
       - uses: dorny/test-reporter@v1
         if: success() || failure()    # run this step even if previous step failed
         with:
           name: scan-apex            # Name of the check run which will be created
-          path: reports/scan-apex.xml    # Path to test results
-          reporter: jest-junit        # Format of test results            
+          path: reports/scan-apex.junit   # Path to test results
+          reporter: java-junit        # Format of test results            
           
   quality-LWC:
     name: Qualidade de codigo LWC
@@ -99,31 +99,12 @@ jobs:
       #    ms-teams-webhook-uri: ${{ secrets.MS_TEAMS_WEBHOOK_URI }}
       #    notification-summary:  Execução da esteira
       #    notification-color: 17a2b8
-      #   timezone: America/Sao_Paulo
-          
-#      - name: SonarCloud Scan
-#        uses: sonarsource/sonarcloud-github-action@master
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          
-#      - name: Install the JEST Plugin
-#        run: |
-          # npm install
-#          npm install @salesforce/sfdx-lwc-jest --save-dev
-          
+      #    timezone: America/Sao_Paulo
+                   
+#           
 #      - name: 'Run Apex tests'
 #        run: sfdx force:apex:test:run -c -r human -d ./tests/apex -w 20 -u HubOrg
-        
-#      - name: 'Delete coverage file (temporary step)'
-#        run: rm ./tests/apex/test-result-707*-codecoverage.json
-    
-#      - name: 'Upload code coverage for Apex to Codecov.io'
-#        uses: codecov/codecov-action@v3
-#        with:
-#          token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
-#          flags: Apex
-      
+              
       #- name: 'Lint Lightning Web Components'
       #  run: |
       #    # npm run lint:lwc
