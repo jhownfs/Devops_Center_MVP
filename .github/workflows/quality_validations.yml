@@ -41,7 +41,7 @@ jobs:
             
       - name: Instalar o SFDX CLI Scanner
         run: |
-          echo 'y' | sfdx plugins:install @salesforce/sfdx-scanner
+          echo 'y' | sfdx plugins:install @salesforce/sfdx-scanner --global
 
   Run-PMD:
     name: Rodar teste do APEX
