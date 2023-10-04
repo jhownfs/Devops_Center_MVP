@@ -48,8 +48,7 @@ jobs:
       - name: Rodar Scanner para Salesforce Apex
         id: review_code
         run: |
-          sfdx scanner:run -f junit -s 3 --normalize-severity -t "force-app" -e "pmd" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-apex.xml
-          echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
+          sfdx scanner:run -f junit -s 3 --normalize-severity -t "force-app" -e "pmd" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-apex.xm
         continue-on-error: true
 
       - uses: actions/upload-artifact@v3
@@ -59,7 +58,7 @@ jobs:
 
       - name: Requisicao para o time de segurança
         run: |
-          echo '${{ steps.review_code.outputs.exitcode }}'
+          echo '${{ steps.review_code.outcome }}'
 
       - name: Publicar resultado dos testes sumarizado
         uses: mikepenz/action-junit-report@v4
