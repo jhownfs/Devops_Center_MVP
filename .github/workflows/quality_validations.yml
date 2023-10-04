@@ -75,7 +75,7 @@ jobs:
             notification_title: "Vulnerabilidades encontradas no {workflow}"
             message_format: "{emoji} *{workflow}* Necessária ação do time de segurança, acesse para rejeitar/aprovar a PR"
             footer: "link do repositório <{repo_url}|{repo}> | <{workflow_url}>"
-          env:
+        env:
             SLACK_WEBHOOK_URL: ${{ secrets.ACTION_SLACK }}
             
       - uses: ravsamhq/notify-slack-action@v2
