@@ -37,19 +37,26 @@ jobs:
       - name: Instalar the SFDX CLI
         run: |
           npm install sfdx-cli --global
-          
+
       - name: Instalar o SFDX CLI Scanner
         run: |
           echo 'y' | sfdx plugins:install @salesforce/sfdx-scanner
   
       - name: Rodar Scanner para Salesforce Apex
         run: |
-          sfdx scanner:run -f xml -t "force-app" -e "pmd" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-apex.json
+          sfdx scanner:run -f xml -t "force-app" -e "pmd" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-apex.xml
             
       - uses: actions/upload-artifact@v3
         with:
           name: cli-scan-report
-          path: reports/scan-apex.json
+          path: reports/scan-apex.xml
+
+      - uses: dorny/test-reporter@v1
+        if: success() || failure()    # run this step even if previous step failed
+        with:
+          name: scan-apex            # Name of the check run which will be created
+          path: reports/scan-apex.xml    # Path to test results
+          reporter: jest-junit        # Format of test results            
           
   quality-LWC:
     name: Qualidade de codigo LWC
