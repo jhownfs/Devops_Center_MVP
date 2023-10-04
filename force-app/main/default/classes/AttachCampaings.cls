@@ -5,8 +5,7 @@ public class AttachCampaings {
       List<Account> lstCupons = [SELECT Id, Name FROM Account];
 
       return lstCupons; 
-      
-    
+        
 
     }
 
