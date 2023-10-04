@@ -46,13 +46,21 @@ jobs:
       - name: Rodar Scanner para Salesforce Apex
         id: pmd_analyzer
         run: |
-          sfdx scanner:run -f table -t "force-app" -e "pmd" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-reports.json
+          sfdx scanner:run -f json -t "force-app" -e "pmd" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-reports.json
               
       - uses: actions/upload-artifact@v3
         with:
           name: cli-scan-report
           path: reports/scan-reports.json  
-  
+      
+      - name: Render results as markdown
+        if: always()
+        uses: forcedotcom/code-analyzer-translator
+        with:
+          runtype: "dfa"
+          outfile-artifact-name: "scan-reports"
+          outfile-artifact-path: "reports/scan-reports.json"
+
       #- name: Notificar usuários
       #  uses: jdcargile/ms-teams-notification@v1.3
       #  with:
