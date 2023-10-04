@@ -58,7 +58,7 @@ jobs:
 
       - name: Requisicao para o time de segurança
         run: |
-          echo '${{ steps.review_code }}'
+          echo '${{ steps.review_code.outputs }}'
 
       - name: Publicar resultado dos testes sumarizado
         uses: mikepenz/action-junit-report@v4
@@ -70,6 +70,18 @@ jobs:
         uses: test-summary/action@v2
         with:
           paths: reports/scan-apex.xml
+
+      - uses: ravsamhq/notify-slack-action@v2
+        if: always()
+        with:
+          status: ${{ job.status }}
+          notification_title: "{workflow} has {status_message}"
+          message_format: "{emoji} *{workflow}* {status_message} in <{repo_url}|{repo}>"
+          footer: "Linked Repo <{repo_url}|{repo}>"
+          notify_when: "failure"
+          mention_users_when: "failure,warnings"
+        env:
+           SLACK_WEBHOOK_URL: ${{ secrets.ACTION_SLACK }}
 
       #- name: Notificar usuários
       #  uses: jdcargile/ms-teams-notification@v1.3
