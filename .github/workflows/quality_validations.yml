@@ -17,8 +17,8 @@ on:
         - 'force-app/**'
       
 jobs:
-  quality-checks:
-    name: qualidade de código
+  quality-Apex:
+    name: Qualidade de codigo APEX
     runs-on: ubuntu-latest      
     steps:
     
@@ -38,11 +38,22 @@ jobs:
         run: |
           npm install sfdx-cli --global
           sfdx force --help
-            
-    
 
-  Run-PMD:
-    name: Rodar teste do APEX
+      - name: Instalar o SFDX CLI Scanner
+        run: |
+          echo 'y' | sfdx plugins:install @salesforce/sfdx-scanner
+  
+      - name: Rodar Scanner para Salesforce Apex
+        run: |
+          sfdx scanner:run -f xml -t "force-app" -e "pmd" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-apex.json
+            
+      - uses: actions/upload-artifact@v3
+        with:
+          name: cli-scan-report
+          path: reports/scan-apex.json
+          
+  quality-LWC:
+    name: Qualidade de codigo LWC
     runs-on: ubuntu-latest  
     steps:
 
@@ -52,12 +63,12 @@ jobs:
 
       - name: Rodar Scanner para Salesforce Apex
         run: |
-          sfdx scanner:run -f xml -t "force-app" -e "pmd" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-reports.xml
+          sfdx scanner:run -f json -t "force-app" -e "eslint" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-lwc.json
           
       - uses: actions/upload-artifact@v3
         with:
           name: cli-scan-report
-          path: reports/scan-reports.xml
+          path: reports/scan-lwc.json
 
       #- name: Notificar usuários
       #  uses: jdcargile/ms-teams-notification@v1.3
