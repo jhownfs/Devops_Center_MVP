@@ -51,14 +51,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: cli-scan-report
-          path: reports/scan-reports.json
-
-      - name: Render results as markdown
-        uses: forcedotcom/code-analyzer-translator
-        with:
-          runtype: "dfa"
-          outfile-artifact-name: "${{ steps.pmd_analyzer.outputs.artifact-name }}"
-          outfile-artifact-path: "${{ steps.pmd_analyzer.outputs.artifact-path }}"     
+          path: reports/scan-reports.json  
   
       #- name: Notificar usuários
       #  uses: jdcargile/ms-teams-notification@v1.3
