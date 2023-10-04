@@ -52,14 +52,6 @@ jobs:
         with:
           name: cli-scan-report
           path: reports/scan-reports.json  
-      
-      - name: Render results as markdown
-        if: always()
-        uses: forcedotcom/code-analyzer-translator
-        with:
-          runtype: "dfa"
-          outfile-artifact-name: "scan-reports"
-          outfile-artifact-path: "reports/scan-reports.json"
 
       #- name: Notificar usuários
       #  uses: jdcargile/ms-teams-notification@v1.3
