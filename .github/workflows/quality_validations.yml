@@ -17,7 +17,7 @@ on:
         - 'force-app/**'
       
 jobs:
-  quality-chekcks:
+  quality-checks:
     name: qualidade de código
     runs-on: ubuntu-latest      
     steps:
@@ -33,6 +33,7 @@ jobs:
       - name: Instalar o gerenciador de pacotes NPM
         run: |
           npm install
+
       - name: Instalar the SFDX CLI
         run: |
           npm install sfdx-cli --global
@@ -41,7 +42,12 @@ jobs:
       - name: Instalar o SFDX CLI Scanner
         run: |
           echo 'y' | sfdx plugins:install @salesforce/sfdx-scanner
-          
+
+  Run-PMD:
+    name: Rodar teste do APEX
+    runs-on: ubuntu-latest  
+    steps:
+
       - name: Rodar Scanner para Salesforce Apex
         run: |
           sfdx scanner:run -f xml -t "force-app" -e "pmd" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-reports.xml
@@ -51,7 +57,6 @@ jobs:
           name: cli-scan-report
           path: reports/scan-reports.xml
 
-          
       #- name: Notificar usuários
       #  uses: jdcargile/ms-teams-notification@v1.3
       #  with:
