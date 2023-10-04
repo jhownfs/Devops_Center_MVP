@@ -47,19 +47,18 @@ jobs:
   
       - name: Rodar Scanner para Salesforce Apex
         run: |
-          sfdx scanner:run -f json -t "force-app" -e "pmd" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-apex.json
+          sfdx scanner:run -f csv -t "force-app" -e "pmd" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-apex.csv
             
       - uses: actions/upload-artifact@v3
         with:
           name: cli-scan-report
-          path: reports/scan-apex.json
+          path: reports/scan-apex.csv
 
-      - name: Comment Test Coverage
-        uses: vhoyer/comment-test-coverage@1.3.0
+      - name: Create MD
+        uses: petems/csv-to-md-table-action@master
+        id: csv-table-output
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          path: reports/scan-apex.json
-          title: Test Coverage   
+         csvinput: reports/scan-apex.csv 
           
   quality-LWC:
     name: Qualidade de codigo LWC
