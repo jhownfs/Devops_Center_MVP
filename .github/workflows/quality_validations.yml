@@ -55,7 +55,7 @@ jobs:
         if: success() || failure()    # run this step even if previous step failed
         with:
           name: scan-apex            # Name of the check run which will be created
-          path: reports/scan-apex.junit   # Path to test results
+          path: reports/scan-apex.xml   # Path to test results
           reporter: java-junit        # Format of test results            
           
   quality-LWC:
