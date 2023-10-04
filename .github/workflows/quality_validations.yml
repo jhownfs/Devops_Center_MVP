@@ -37,8 +37,7 @@ jobs:
       - name: Instalar the SFDX CLI
         run: |
           npm install sfdx-cli --global
-          sfdx force --help
-
+          
       - name: Instalar o SFDX CLI Scanner
         run: |
           echo 'y' | sfdx plugins:install @salesforce/sfdx-scanner
@@ -56,6 +55,22 @@ jobs:
     name: Qualidade de codigo LWC
     runs-on: ubuntu-latest  
     steps:
+
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+        
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Instalar o gerenciador de pacotes NPM
+        run: |
+          npm install
+
+      - name: Instalar the SFDX CLI
+        run: |
+          npm install sfdx-cli --global
 
       - name: Instalar o SFDX CLI Scanner
         run: |
