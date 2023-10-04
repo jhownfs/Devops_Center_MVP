@@ -48,17 +48,13 @@ jobs:
       - name: Rodar Scanner para Salesforce Apex
         id: review_code
         run: |
-          sfdx scanner:run -f junit -s 3 --normalize-severity -t "force-app" -e "pmd" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-apex.xm
+          sfdx scanner:run -f junit -s 3 --normalize-severity -t "force-app" -e "pmd" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-apex.xml
         continue-on-error: true
 
       - uses: actions/upload-artifact@v3
         with:
           name: cli-scan-report
           path: reports/scan-apex.xml
-
-      - name: Requisicao para o time de segurança
-        run: |
-          echo '${{ steps.review_code.outcome }}'
 
       - name: Publicar resultado dos testes sumarizado
         uses: mikepenz/action-junit-report@v4
@@ -72,36 +68,23 @@ jobs:
           paths: reports/scan-apex.xml
 
       - uses: ravsamhq/notify-slack-action@v2
+        if: ${{ steps.review_code.outcome == 'failure' }}
+        with:
+            status: ${{ job.status }}
+            token: ${{ github.token }}
+            notification_title: "Vulnerabilidades encontradas no {workflow}"
+            message_format: "{emoji} *{workflow}* Necessária ação do time de segurança, acesse para rejeitar/aprovar a PR"
+            footer: "link do repositório <{repo_url}|{repo}> | <{workflow_url}>"
+          env:
+            SLACK_WEBHOOK_URL: ${{ secrets.ACTION_SLACK }}
+            
+      - uses: ravsamhq/notify-slack-action@v2
         if: always()
         with:
           status: ${{ job.status }}
           token: ${{ github.token }}
-          notification_title: "{workflow} has {status_message}"
-          message_format: "{emoji} *{workflow}* {status_message} in <{repo_url}|{repo}>"
-          footer: "Linked Repo <{repo_url}|{repo}> | <{workflow_url}>"
+          notification_title: "{workflow} foi executado com {status_message}"
+          message_format: "{emoji} *{workflow}* {status_message} no <{repo_url}|{repo}>"
+          footer: link do repositório <{repo_url}|{repo}> | <{workflow_url}>"
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.ACTION_SLACK }}
-
-      #- name: Notificar usuários
-      #  uses: jdcargile/ms-teams-notification@v1.3
-      #  with:
-      #    github-token: ${{ github.token }}
-      #    ms-teams-webhook-uri: ${{ secrets.MS_TEAMS_WEBHOOK_URI }}
-      #    notification-summary:  Execução da esteira
-      #    notification-color: 17a2b8
-      #    timezone: America/Sao_Paulo
-                   
-#           
-#      - name: 'Run Apex tests'
-#        run: sfdx force:apex:test:run -c -r human -d ./tests/apex -w 20 -u HubOrg
-              
-      #- name: 'Lint Lightning Web Components'
-      #  run: |
-      #    # npm run lint:lwc
-      #    echo "Lint Lightning Web Components"
-        
-#      - name: Run the Jest coverage script
-#        if: github.event.pull_request.merged == true
-#        run: |
-#          npm run test:unit:coverage
-#          echo "Run the Jest coverage script"
+          SLACK_WEBHOOK_URL: ${{ secrets.RELEASE_TEAM_SLACK }}
