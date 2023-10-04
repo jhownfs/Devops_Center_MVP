@@ -19,10 +19,13 @@ on:
 jobs:
   quality-Apex:
     name: Qualidade APEX
-    runs-on: ubuntu-latest    
+    runs-on: ubuntu-latest
+    outputs:
+      output1: ${{ steps.apex_status.outputs.outcome }}  
     permissions:
       checks: write
       contents: read 
+
     steps:
     
       - uses: actions/checkout@v3
@@ -46,7 +49,7 @@ jobs:
           echo 'y' | sfdx plugins:install @salesforce/sfdx-scanner
   
       - name: Rodar Scanner para Salesforce Apex
-        id: review_code
+        id: apex_status
         run: |
           sfdx scanner:run -f junit -s 3 --normalize-severity -t "force-app" -e "pmd" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-apex.xml
         continue-on-error: true
@@ -56,35 +59,76 @@ jobs:
           name: cli-scan-report
           path: reports/scan-apex.xml
 
-      - name: Publicar resultado dos testes sumarizado
-        uses: mikepenz/action-junit-report@v4
-        if: success() || failure()
-        with:
-          report_paths: 'reports/scan-apex.xml' 
+#      - name: Publicar resultado dos testes sumarizado
+#        uses: mikepenz/action-junit-report@v4
+#        if: success() || failure()
+#        with:
+#          report_paths: 'reports/scan-apex.xml' 
           
-      - name: Detalhes dos testes
-        uses: test-summary/action@v2
-        with:
-          paths: reports/scan-apex.xml
+#      - name: Detalhes dos testes
+#        uses: test-summary/action@v2
+#        with:
+#          paths: reports/scan-apex.xml
+  
+  quality-Flow:  
+    name: Qualidade Flow
+    runs-on: ubuntu-latest  
+    outputs:
+      output1: ${{ steps.flow_status.outputs.outcome }}   
+    permissions:
+      checks: write
+      contents: read 
 
-      - uses: ravsamhq/notify-slack-action@v2
-        if: ${{ steps.review_code.outcome == 'failure' }}
+    steps:
+      - uses: actions/checkout@v3
         with:
-            status: ${{ job.status }}
-            token: ${{ github.token }}
-            notification_title: "Vulnerabilidades encontradas no {workflow}"
-            message_format: "{emoji} *{workflow}* Necessária ação do time de segurança, acesse para rejeitar/aprovar a PR"
-            footer: "link do repositório <{repo_url}|{repo}> | <{workflow_url}>"
-        env:
-            SLACK_WEBHOOK_URL: ${{ secrets.ACTION_SLACK }}
-            
-      - uses: ravsamhq/notify-slack-action@v2
-        if: always()
+          fetch-depth: 0
+          
+      - uses: actions/setup-node@v3
         with:
+          node-version: '16'
+
+      - name: Instalar o gerenciador de pacotes NPM
+        run: |
+          npm install
+
+      - name: Instalar the SFDX CLI
+        run: |
+          npm install sfdx-cli --global
+
+      - name: Instalar o SFDX CLI Scanner
+        run: |
+          echo 'y' | sfdx plugins:install lightning-flow-scanner  
+
+      - name: Validacao Flow
+        id: flow_status
+        run: |
+          sfdx flow:scan -f 2 -d "force-app\main\default\flows" --json
+
+  comunicacoes:
+    name: Notificações e alertas
+    runs-on: ubuntu-latest
+    needs: [quality-Apex, quality-Flow]
+    steps:
+      
+    - uses: ravsamhq/notify-slack-action@v2
+      if: ${{ needs.quality-Apex.outputs.output1 == 'failure' && needs.quality-Flow.outputs.output1 == 'failure'}}
+      with:
+          status: ${{ job.status }}
+          token: ${{ github.token }}
+          notification_title: "Vulnerabilidades encontradas no {workflow}"
+          message_format: "{emoji} *{workflow}* Necessária ação do time de segurança, acesse para rejeitar/aprovar a PR"
+          footer: "link do repositório <{repo_url}|{repo}> | <{workflow_url}>"
+      env:
+          SLACK_WEBHOOK_URL: ${{ secrets.ACTION_SLACK }}
+              
+    - uses: ravsamhq/notify-slack-action@v2
+      if: always()
+      with:
           status: ${{ job.status }}
           token: ${{ github.token }}
           notification_title: "{workflow} foi executado com {status_message}"
           message_format: "{emoji} *{workflow}* {status_message} no <{repo_url}|{repo}>"
           footer: link do repositório <{repo_url}|{repo}> | <{workflow_url}>"
-        env:
+      env:
           SLACK_WEBHOOK_URL: ${{ secrets.RELEASE_TEAM_SLACK }}
