@@ -18,7 +18,7 @@ on:
       
 jobs:
   quality-Apex:
-    name: Qualidade de codigo APEX
+    name: Qualidade APEX
     runs-on: ubuntu-latest    
     permissions:
       checks: write
@@ -56,17 +56,22 @@ jobs:
           path: reports/scan-apex.xml
 
       - name: Requisicao para o time de segurança
-        if: ${{ steps.review_code.outputs.critical_issues }}
         run: |
-          echo 'achou issue'
+          echo '${{ steps.review_code.outputs.critical_issues }}'
 
-      - name: Test Summary
+      - name: Publicar resultado dos testes sumarizado
+        uses: mikepenz/action-junit-report@v4
+        if: success() || failure()
+        with:
+          report_paths: 'reports/scan-apex.xml' 
+          
+      - name: Detalhes dos testes
         uses: test-summary/action@v2
         with:
           paths: reports/scan-apex.xml
 
   quality-LWC:
-    name: Qualidade de codigo LWC
+    name: Qualidade LWC
     runs-on: ubuntu-latest 
     permissions:
       checks: write
