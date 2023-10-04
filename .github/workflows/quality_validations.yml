@@ -44,12 +44,12 @@ jobs:
   
       - name: Rodar Scanner para Salesforce Apex
         run: |
-          sfdx scanner:run -f junit -t "force-app" -e "pmd" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-apex.junit
+          sfdx scanner:run -f junit -t "force-app" -e "pmd" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-apex.xml
             
       - uses: actions/upload-artifact@v3
         with:
           name: cli-scan-report
-          path: reports/scan-apex.junit
+          path: reports/scan-apex.xml
 
       - uses: dorny/test-reporter@v1
         if: success() || failure()    # run this step even if previous step failed
