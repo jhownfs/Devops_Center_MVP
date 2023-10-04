@@ -38,25 +38,16 @@ jobs:
         run: |
           npm install sfdx-cli --global
           sfdx force --help
-  
-  Executar_PMD: 
-    name: PMD checks
-    runs-on: ubuntu-latest
-    steps:
 
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      
       - name: Instalar o SFDX CLI Scanner
         run: |
           echo 'y' | sfdx plugins:install @salesforce/sfdx-scanner
-          
+              
       - name: Rodar Scanner para Salesforce Apex
         id: pmd_analyzer
         run: |
           sfdx scanner:run -f table -t "force-app" -e "pmd" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-reports.json
-          
+              
       - uses: actions/upload-artifact@v3
         with:
           name: cli-scan-report
@@ -68,8 +59,7 @@ jobs:
           runtype: "dfa"
           outfile-artifact-name: "${{ steps.pmd_analyzer.outputs.artifact-name }}"
           outfile-artifact-path: "${{ steps.pmd_analyzer.outputs.artifact-path }}"     
-          
-          
+  
       #- name: Notificar usuários
       #  uses: jdcargile/ms-teams-notification@v1.3
       #  with:
