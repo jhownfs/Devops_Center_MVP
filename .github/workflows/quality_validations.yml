@@ -49,7 +49,6 @@ jobs:
         id: review_code
         run: |
           sfdx scanner:run -f junit -s 3 --normalize-severity -t "force-app" -e "pmd" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-apex.xml
-        continue-on-error: true 
 
       - uses: actions/upload-artifact@v3
         with:
