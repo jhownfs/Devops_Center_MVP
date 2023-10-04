@@ -46,30 +46,26 @@ jobs:
           echo 'y' | sfdx plugins:install @salesforce/sfdx-scanner
   
       - name: Rodar Scanner para Salesforce Apex
+        id: review_code
         run: |
-          sfdx scanner:run -f csv -t "force-app" -e "pmd" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-apex.csv
+          sfdx scanner:run -f html -t "force-app" -e "pmd" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-apex.html
             
       - uses: actions/upload-artifact@v3
         with:
           name: cli-scan-report
-          path: reports/scan-apex.csv
+          path: reports/scan-apex.html
 
-      - name: Create MD
-        uses: petems/csv-to-md-table-action@master
-        id: csv-table-output
+      - name: Requisicao para o time de segurança
+        if: ${{ steps.review_code.outputs.critical_issues }}
+        run: |
+          echo 'achou issue'
+
+      - name: HTML Preview
+        id: html_preview
+        uses: pavi2410/html-preview-action@v2
         with:
-         csvinput: reports/scan-apex.csv 
-     
-      - name: Add comment on Pull-request
-        uses: mshick/add-pr-comment@v1
-        with:
-          message: |
-            CSV changes detected:
-            ${{steps.csv-table-output.outputs.markdown-table}}
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          repo-token-user-login: 'github-actions[bot]' # The user.login for temporary GitHub tokens
-          allow-repeats: true
-          
+          html_file: 'reports/scan-apex.html'
+
   quality-LWC:
     name: Qualidade de codigo LWC
     runs-on: ubuntu-latest 
