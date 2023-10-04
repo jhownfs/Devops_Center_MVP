@@ -71,10 +71,17 @@ jobs:
         with:
           paths: reports/scan-apex.xml
 
-      - name: Slack Notification
-        uses: rtCamp/action-slack-notify@v2
+      - uses: ravsamhq/notify-slack-action@v2
+        if: always()
+        with:
+          status: ${{ job.status }}
+          token: ${{ github.token }}
+          notification_title: "{workflow} has {status_message}"
+          message_format: "{emoji} *{workflow}* {status_message} in <{repo_url}|{repo}>"
+          footer: "Linked Repo <{repo_url}|{repo}> | <{workflow_url}|View Workflow>"
+          notify_when: "failure"
         env:
-          SLACK_WEBHOOK: ${{ secrets.ACTION_SLACK }}
+          SLACK_WEBHOOK_URL: ${{ secrets.ACTION_SLACK }}
 
       #- name: Notificar usuários
       #  uses: jdcargile/ms-teams-notification@v1.3
