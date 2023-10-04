@@ -56,7 +56,7 @@ jobs:
         with:
           name: scan-apex            # Name of the check run which will be created
           path: reports/scan-apex.xml   # Path to test results
-          reporter: java-junit        # Format of test results            
+          reporter: jest-junit        # Format of test results            
           
   quality-LWC:
     name: Qualidade de codigo LWC
