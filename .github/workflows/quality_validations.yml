@@ -39,14 +39,16 @@ jobs:
           npm install sfdx-cli --global
           sfdx force --help
             
-      - name: Instalar o SFDX CLI Scanner
-        run: |
-          echo 'y' | sfdx plugins:install @salesforce/sfdx-scanner --global
+    
 
   Run-PMD:
     name: Rodar teste do APEX
     runs-on: ubuntu-latest  
     steps:
+
+      - name: Instalar o SFDX CLI Scanner
+        run: |
+          echo 'y' | sfdx plugins:install @salesforce/sfdx-scanner
 
       - name: Rodar Scanner para Salesforce Apex
         run: |
