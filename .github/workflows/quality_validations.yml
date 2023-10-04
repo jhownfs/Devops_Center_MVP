@@ -45,16 +45,25 @@ jobs:
         run: |
           echo 'y' | sfdx plugins:install @salesforce/sfdx-scanner
   
-      - name: Code Review
-        uses: packocz/sfdx-code-review-action@v0.3.0
+      - name: Rodar Scanner para Salesforce Apex
+        id: review_code
+        run: |
+          sfdx scanner:run -f junit -t "force-app" -e "pmd" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-apex.xml
+            
+      - uses: actions/upload-artifact@v3
         with:
-            source_path: '"***.cls"'
-            reject_threshold: 1
-            max_comments: 20
-            category: '!Documentation'
-            engine: 'pmd, eslint'
-            dfa_setting: 'dfa'
-            github_token: ${{ secrets.GITHUB_TOKEN }}
+          name: cli-scan-report
+          path: reports/scan-apex.xml
+
+      - name: Requisicao para o time de segurança
+        if: ${{ steps.review_code.outputs.critical_issues }}
+        run: |
+          echo 'achou issue'
+
+      - name: Test Summary
+        uses: test-summary/action@v2
+        with:
+          paths: reports/scan-apex.xml
 
   quality-LWC:
     name: Qualidade de codigo LWC
