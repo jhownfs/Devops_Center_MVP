@@ -81,7 +81,7 @@ jobs:
           notify_when: "failure"
           mention_users_when: "failure,warnings"
         env:
-           SLACK_WEBHOOK_URL: ${{ secrets.ACTION_SLACK }}
+           SLACK_WEBHOOK_URL: https://hooks.slack.com/services/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
 
       #- name: Notificar usuários
       #  uses: jdcargile/ms-teams-notification@v1.3
