@@ -108,17 +108,20 @@ jobs:
         continue-on-error: true
 
       - uses: actions/upload-artifact@v3
+        if: always()
         with:
           name: cli-scan-report
           path: reports/scan-lwc.xml
 
       - name: Publicar resultado dos testes sumarizado
         uses: mikepenz/action-junit-report@v4
-        if: success() || failure()
+        if: always()
         with:
           report_paths: 'reports/scan-lwc.xml' 
+          check_name: "Qualidade de código Apex"
             
       - name: Detalhes dos testes
+        if: always()
         uses: test-summary/action@v2
         with:
           paths: reports/scan-lwc.xml   
