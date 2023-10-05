@@ -53,7 +53,6 @@ jobs:
         id: apex_status
         run: |
           sfdx scanner:run -f junit -s 3 --normalize-severity -t "force-app" -e "pmd" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-apex.xml
-        continue-on-error: true
 
       - uses: actions/upload-artifact@v3
         with:
@@ -65,6 +64,7 @@ jobs:
         if: success() || failure()
         with:
           report_paths: 'reports/scan-apex.xml' 
+          check_name: "Qualidade de código Apex"
           
       - name: Detalhes dos testes
         uses: test-summary/action@v2
@@ -118,7 +118,7 @@ jobs:
         if: always()
         with:
           report_paths: 'reports/scan-lwc.xml' 
-          check_name: "Qualidade de código Apex"
+          check_name: "Qualidade de código LWC"
             
       - name: Detalhes dos testes
         if: always()
