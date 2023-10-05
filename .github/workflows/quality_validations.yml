@@ -2,21 +2,14 @@ name: Validação de Qualidade
 run-name: ${{ github.actor }}
 
 on:
-  push:
-    branches:
-      - '*'
-    paths:
-        - 'force-app/**'
   pull_request:
-    types: [opened, edited, submitted]
+    types: [opened, edited]
     branches:
         - main
         - Staging
         - UAT
         - SIT
-    paths:
-        - 'force-app/**'
-      
+              
 jobs:
   quality-Apex:
     name: Qualidade APEX
@@ -160,9 +153,16 @@ jobs:
       contents: write
     steps:
       
+      - uses: danielswensson/auto-assign-owner-action@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
       - uses: github/lock@v2.1.1
         id: lock
+        if: ${{ needs.quality-Apex.outputs.output1 == 'failure' && needs.quality-LWC.outputs.output1 == 'failure'}}
         with:
           mode: "lock"
           reason: "Encontrados erros na execução de qualidade de código, necessária ações do time de securança"
           environment: ${GITHUB_REF}
+
+          
