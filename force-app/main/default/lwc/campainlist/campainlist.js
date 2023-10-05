@@ -17,6 +17,7 @@ export default class Campainlist extends LightningElement {
         }
         
     })
+    
   }
 
   addContent(){
