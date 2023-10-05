@@ -2,6 +2,13 @@ name: Validação de Qualidade
 run-name: ${{ github.actor }}
 
 on:
+  push:
+    branches:
+      - main
+      - Staging
+      - UAT
+      - SIT
+      
   pull_request:
     types: [opened, edited, synchronize]
     branches:
