@@ -9,7 +9,7 @@ on:
         - Staging
         - UAT
         - SIT
-              
+
 jobs:
   quality-Apex:
     name: Qualidade APEX
@@ -138,7 +138,7 @@ jobs:
       with:
           status: ${{ job.status }}
           token: ${{ github.token }}
-          notification_title: '{branch} foi executado com {status_message}'
+          notification_title: '{branch} foi executado com :x:'
           message_format: '{emoji} {workflow} {status_message} enviado por ${{ github.event.head_commit.author.name }} <{commit_url}|{commit_sha}> com os seguintes resultados de teste apex :x: e lwc :x:'
           footer: link do repositório <{repo_url}|{repo}> | ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
       env:
@@ -146,7 +146,6 @@ jobs:
 
   pr-actions:
     name: Ações Pull Request
-    if: ${{ github.event.issue.pull_request }}
     runs-on: ubuntu-latest
     needs: [comunicacoes]
     permissions:
