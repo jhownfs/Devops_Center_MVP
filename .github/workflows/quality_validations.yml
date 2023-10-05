@@ -135,8 +135,8 @@ jobs:
           status: ${{ job.status }}
           token: ${{ github.token }}
           notification_title: 'Vulnerabilidades encontradas no ${{ github.head_ref }}'
-          message_format: ':large_orange_diamond: *{commit_url}* Necessária ação do time de segurança, acesse para rejeitar/aprovar a PR'
-          footer: "link do repositório <{repo_url}|{repo}> | <{workflow_url}>"
+          message_format: ':large_orange_diamond: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} Necessária ação do time de segurança, acesse para rejeitar/aprovar a PR'
+          footer: "link do repositório <{repo_url}|{repo}> | {workflow_url}"
       env:
           SLACK_WEBHOOK_URL: ${{ secrets.ACTION_SLACK }}
               
@@ -145,9 +145,9 @@ jobs:
       with:
           status: ${{ job.status }}
           token: ${{ github.token }}
-          notification_title: '${{ github.event }} foi executado com {status_message}'
-          message_format: '{emoji} *{workflow}* {status_message} no <{commit_url}|{commit_sha}> com testes do apex ${{needs.quality-Apex.outputs.output1}} and ${{needs.quality-LWC.outputs.output1}}'
-          footer: link do repositório <{repo_url}|{repo}> | <{workflow_url}>"
+          notification_title: '{branch} foi executado com {status_message}'
+          message_format: '{emoji} {workflow} {status_message} enviado por ${{ github.event.head_commit.author.name }} <{commit_url}|{commit_sha}> com os seguintes resultados de teste apex :x: e lwc :x:'
+          footer: link do repositório <{repo_url}|{repo}> | ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
       env:
           SLACK_WEBHOOK_URL: ${{ secrets.RELEASE_TEAM_SLACK }}
 
