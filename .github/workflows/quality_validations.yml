@@ -152,10 +152,6 @@ jobs:
       contents: write
     steps:
       
-      - uses: danielswensson/auto-assign-owner-action@v1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
       - uses: github/lock@v2.1.1
         id: lock
         if: ${{ needs.quality-Apex.outputs.output1 == 'failure' && needs.quality-LWC.outputs.output1 == 'failure'}}
