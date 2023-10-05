@@ -1,4 +1,5 @@
 name: Validação de Qualidade
+run-name: Commit ${{ github.event.head_commit.message }} enviado por @${{ github.actor }}
 
 on:
   push:
@@ -160,3 +161,26 @@ jobs:
           footer: link do repositório <{repo_url}|{repo}> | ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
       env:
           SLACK_WEBHOOK_URL: ${{ secrets.RELEASE_TEAM_SLACK }}
+
+    - name: Send mail
+      uses: dawidd6/action-send-mail@v3
+      with:
+        connection_url: ${{secrets.MAIL_CONNECTION}}
+        server_address: smtp.live.com
+        server_port: 465
+        # Optional whether this connection use TLS (default is true if server_port is 465)
+        secure: true
+        # Required mail subject:
+        subject: Github Actions job result
+        # Required recipients' addresses:
+        to: jhown_fs@hotmail.com
+        # Required sender full name (address can be skipped):
+        from: Devops team# <user@example.com>
+        # Optional plain body:
+        body: Build job of ${{github.repository}} completed successfully!
+        ignore_cert: true
+        # Optional attachments:
+        attachments: reports/scan-lwc.xml
+        # Optional priority: 'high', 'normal' (default) or 'low'
+        priority: low
+
