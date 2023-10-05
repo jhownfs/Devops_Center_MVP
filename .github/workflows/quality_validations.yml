@@ -22,7 +22,7 @@ jobs:
     name: Qualidade APEX
     runs-on: ubuntu-latest
     outputs:
-      output1: ${{ steps.apex_status.outputs.outcome }}  
+      output1: ${{ steps.apex_status.outcome }}  
     permissions:
       checks: write
       contents: read 
@@ -75,7 +75,7 @@ jobs:
     name: Qualidade LWC
     runs-on: ubuntu-latest  
     outputs:
-      output1: ${{ steps.lwc_status.outputs.outcome }}   
+      output1: ${{ steps.lwc_status.outcome }}   
     permissions:
       checks: write
       contents: read 
