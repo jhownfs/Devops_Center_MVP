@@ -1,0 +1,286 @@
+<testsuites>
+<testsuite name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\campainlist.js" tests="1" errors="1">
+<testcase name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\campainlist.js">
+<failure message="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\campainlist.js: 40 Parsing error: Unexpected token, expected &quot;,&quot; (40:17)" type="2">
+2: Parsing error: Unexpected token, expected &quot;,&quot; (40:17)
+Category: Scanner Internal - files-must-compile
+File: D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\campainlist.js
+Line: 40
+Column: 17
+URL: 
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js" tests="27" errors="27">
+<testcase name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js">
+<failure message="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js: 1 There should be no space after &#39;{&#39;." type="2">
+2: There should be no space after &#39;{&#39;.
+Category: layout - object-curly-spacing
+File: D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js
+Line: 1
+Column: 9
+URL: https://eslint.org/docs/latest/rules/object-curly-spacing
+</failure>
+</testcase>
+<testcase name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js">
+<failure message="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js: 1 There should be no space before &#39;}&#39;." type="2">
+2: There should be no space before &#39;}&#39;.
+Category: layout - object-curly-spacing
+File: D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js
+Line: 1
+Column: 23
+URL: https://eslint.org/docs/latest/rules/object-curly-spacing
+</failure>
+</testcase>
+<testcase name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js">
+<failure message="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js: 1 Strings must use doublequote." type="2">
+2: Strings must use doublequote.
+Category: layout - quotes
+File: D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js
+Line: 1
+Column: 31
+URL: https://eslint.org/docs/latest/rules/quotes
+</failure>
+</testcase>
+<testcase name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js">
+<failure message="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js: 2 Imports should be sorted alphabetically." type="2">
+2: Imports should be sorted alphabetically.
+Category: suggestion - sort-imports
+File: D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js
+Line: 2
+Column: 1
+URL: https://eslint.org/docs/latest/rules/sort-imports
+</failure>
+</testcase>
+<testcase name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js">
+<failure message="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js: 2 Strings must use doublequote." type="2">
+2: Strings must use doublequote.
+Category: layout - quotes
+File: D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js
+Line: 2
+Column: 25
+URL: https://eslint.org/docs/latest/rules/quotes
+</failure>
+</testcase>
+<testcase name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js">
+<failure message="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js: 4 Strings must use doublequote." type="2">
+2: Strings must use doublequote.
+Category: layout - quotes
+File: D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js
+Line: 4
+Column: 10
+URL: https://eslint.org/docs/latest/rules/quotes
+</failure>
+</testcase>
+<testcase name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js">
+<failure message="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js: 4 There should be a line break after this argument." type="2">
+2: There should be a line break after this argument.
+Category: layout - function-call-argument-newline
+File: D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js
+Line: 4
+Column: 26
+URL: https://eslint.org/docs/latest/rules/function-call-argument-newline
+</failure>
+</testcase>
+<testcase name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js">
+<failure message="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js: 4 Block must be padded by blank lines." type="2">
+2: Block must be padded by blank lines.
+Category: layout - padded-blocks
+File: D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js
+Line: 4
+Column: 33
+URL: https://eslint.org/docs/latest/rules/padded-blocks
+</failure>
+</testcase>
+<testcase name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js">
+<failure message="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js: 5 Block must be padded by blank lines." type="2">
+2: Block must be padded by blank lines.
+Category: layout - padded-blocks
+File: D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js
+Line: 5
+Column: 21
+URL: https://eslint.org/docs/latest/rules/padded-blocks
+</failure>
+</testcase>
+<testcase name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js">
+<failure message="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js: 6 This line has a length of 91. Maximum allowed is 80." type="2">
+2: This line has a length of 91. Maximum allowed is 80.
+Category: layout - max-len
+File: D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js
+Line: 6
+Column: 1
+URL: https://eslint.org/docs/latest/rules/max-len
+</failure>
+</testcase>
+<testcase name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js">
+<failure message="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js: 7 Block must be padded by blank lines." type="2">
+2: Block must be padded by blank lines.
+Category: layout - padded-blocks
+File: D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js
+Line: 7
+Column: 42
+URL: https://eslint.org/docs/latest/rules/padded-blocks
+</failure>
+</testcase>
+<testcase name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js">
+<failure message="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js: 8 Block must be padded by blank lines." type="2">
+2: Block must be padded by blank lines.
+Category: layout - padded-blocks
+File: D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js
+Line: 8
+Column: 65
+URL: https://eslint.org/docs/latest/rules/padded-blocks
+</failure>
+</testcase>
+<testcase name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js">
+<failure message="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js: 9 Block must be padded by blank lines." type="2">
+2: Block must be padded by blank lines.
+Category: layout - padded-blocks
+File: D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js
+Line: 9
+Column: 10
+URL: https://eslint.org/docs/latest/rules/padded-blocks
+</failure>
+</testcase>
+<testcase name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js">
+<failure message="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js: 12 This line has a length of 85. Maximum allowed is 80." type="2">
+2: This line has a length of 85. Maximum allowed is 80.
+Category: layout - max-len
+File: D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js
+Line: 12
+Column: 1
+URL: https://eslint.org/docs/latest/rules/max-len
+</failure>
+</testcase>
+<testcase name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js">
+<failure message="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js: 12 Strings must use doublequote." type="2">
+2: Strings must use doublequote.
+Category: layout - quotes
+File: D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js
+Line: 12
+Column: 8
+URL: https://eslint.org/docs/latest/rules/quotes
+</failure>
+</testcase>
+<testcase name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js">
+<failure message="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js: 12 There should be a line break after this argument." type="2">
+2: There should be a line break after this argument.
+Category: layout - function-call-argument-newline
+File: D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js
+Line: 12
+Column: 78
+URL: https://eslint.org/docs/latest/rules/function-call-argument-newline
+</failure>
+</testcase>
+<testcase name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js">
+<failure message="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js: 12 Block must be padded by blank lines." type="2">
+2: Block must be padded by blank lines.
+Category: layout - padded-blocks
+File: D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js
+Line: 12
+Column: 85
+URL: https://eslint.org/docs/latest/rules/padded-blocks
+</failure>
+</testcase>
+<testcase name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js">
+<failure message="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js: 14 Strings must use doublequote." type="2">
+2: Strings must use doublequote.
+Category: layout - quotes
+File: D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js
+Line: 14
+Column: 39
+URL: https://eslint.org/docs/latest/rules/quotes
+</failure>
+</testcase>
+<testcase name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js">
+<failure message="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js: 14 There should be a line break after this argument." type="2">
+2: There should be a line break after this argument.
+Category: layout - function-call-argument-newline
+File: D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js
+Line: 14
+Column: 55
+URL: https://eslint.org/docs/latest/rules/function-call-argument-newline
+</failure>
+</testcase>
+<testcase name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js">
+<failure message="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js: 15 Unquoted property &#39;is&#39; found." type="2">
+2: Unquoted property &#39;is&#39; found.
+Category: suggestion - quote-props
+File: D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js
+Line: 15
+Column: 13
+URL: https://eslint.org/docs/latest/rules/quote-props
+</failure>
+</testcase>
+<testcase name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js">
+<failure message="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js: 21 Expected a block comment instead of consecutive line comments." type="2">
+2: Expected a block comment instead of consecutive line comments.
+Category: suggestion - multiline-comment-style
+File: D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js
+Line: 21
+Column: 9
+URL: https://eslint.org/docs/latest/rules/multiline-comment-style
+</failure>
+</testcase>
+<testcase name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js">
+<failure message="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js: 22 Comments should not begin with a lowercase character." type="2">
+2: Comments should not begin with a lowercase character.
+Category: suggestion - capitalized-comments
+File: D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js
+Line: 22
+Column: 9
+URL: https://eslint.org/docs/latest/rules/capitalized-comments
+</failure>
+</testcase>
+<testcase name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js">
+<failure message="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js: 23 No magic number: 1." type="2">
+2: No magic number: 1.
+Category: suggestion - no-magic-numbers
+File: D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js
+Line: 23
+Column: 16
+URL: https://eslint.org/docs/latest/rules/no-magic-numbers
+</failure>
+</testcase>
+<testcase name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js">
+<failure message="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js: 23 No magic number: 1." type="2">
+2: No magic number: 1.
+Category: suggestion - no-magic-numbers
+File: D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js
+Line: 23
+Column: 24
+URL: https://eslint.org/docs/latest/rules/no-magic-numbers
+</failure>
+</testcase>
+<testcase name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js">
+<failure message="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js: 23 Block must be padded by blank lines." type="2">
+2: Block must be padded by blank lines.
+Category: layout - padded-blocks
+File: D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js
+Line: 23
+Column: 27
+URL: https://eslint.org/docs/latest/rules/padded-blocks
+</failure>
+</testcase>
+<testcase name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js">
+<failure message="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js: 24 Block must be padded by blank lines." type="2">
+2: Block must be padded by blank lines.
+Category: layout - padded-blocks
+File: D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js
+Line: 24
+Column: 8
+URL: https://eslint.org/docs/latest/rules/padded-blocks
+</failure>
+</testcase>
+<testcase name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js">
+<failure message="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js: 25 Newline required at end of file but not found." type="2">
+2: Newline required at end of file but not found.
+Category: layout - eol-last
+File: D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\__tests__\campainlist.test.js
+Line: 25
+Column: 4
+URL: https://eslint.org/docs/latest/rules/eol-last
+</failure>
+</testcase>
+</testsuite>
+</testsuites>

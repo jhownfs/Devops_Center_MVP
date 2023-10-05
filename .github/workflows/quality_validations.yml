@@ -8,8 +8,9 @@ on:
     paths:
         - 'force-app/**'
   pull_request:
+    types: [opened, edited]
     branches:
-        - master
+        - main
         - Staging
         - UAT
         - SIT
@@ -51,7 +52,7 @@ jobs:
       - name: Rodar Scanner para Salesforce Apex
         id: apex_status
         run: |
-          sfdx scanner:run -f junit -s 3 --normalize-severity -t "force-app" -e "pmd" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-apex.xml
+          sfdx scanner:run -f junit -s 3 --normalize-severity -t "force-app" -e "pmd" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-apex.xml --engine cpd
         continue-on-error: true
 
       - uses: actions/upload-artifact@v3
@@ -71,7 +72,7 @@ jobs:
 #          paths: reports/scan-apex.xml
   
   quality-LWC:  
-    name: Qualidade Flow
+    name: Qualidade LWC
     runs-on: ubuntu-latest  
     outputs:
       output1: ${{ steps.lwc_status.outputs.outcome }}   
@@ -100,16 +101,57 @@ jobs:
         run: |
           echo 'y' | sfdx plugins:install @salesforce/sfdx-scanner
 
-      - name: Validacao Flow
+      - name: Validacao
         id: lwc_status
         run: |
-            sfdx scanner:run -f junit -s 3 --normalize-severity -t "force-app" -e "eslint" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-lwc.xml
+            sfdx scanner:run -f junit -s 3 --normalize-severity -t "force-app" -e "eslint" --outfile ./reports/scan-lwc.xml
         continue-on-error: true
 
       - uses: actions/upload-artifact@v3
         with:
           name: cli-scan-report
           path: reports/scan-lwc.xml
+
+  quality-FLOW:  
+    name: Qualidade FLOW
+    runs-on: ubuntu-latest  
+    outputs:
+      output1: ${{ steps.flw_status.outputs.outcome }}   
+    permissions:
+      checks: write
+      contents: read 
+      
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+                
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      
+      - name: Instalar o gerenciador de pacotes NPM
+        run: |
+          npm install
+      
+      - name: Instalar the SFDX CLI
+        run: |
+          npm install sfdx-cli --global
+      
+      - name: Instalar o SFDX CLI Scanner
+        run: |
+          echo 'y' | sfdx plugins:install lightning-flow-scanner
+      
+      - name: Validacao Flow
+        id: flw_status
+        run: |
+          sfdx flow:scan -d .\force-app\ -f error
+        continue-on-error: true
+
+      - name: Validacao msg
+        run: |
+          echo ${{ steps.flw_status.outcome }}
+        
 
   comunicacoes:
     name: Notificações e alertas
