@@ -3,13 +3,13 @@ run-name: ${{ github.actor }}
 
 on:
   pull_request:
-    types: [opened, edited]
+    types: [opened, edited, synchronize]
     branches:
         - main
         - Staging
         - UAT
         - SIT
-              
+
 jobs:
   quality-Apex:
     name: Qualidade APEX
@@ -121,6 +121,13 @@ jobs:
     runs-on: ubuntu-latest
     needs: [quality-Apex, quality-LWC]
     steps:
+
+
+    - name: getPrUrl
+      id: pr-url
+      uses: ammaratef45/pr-url-action@v1
+    - name: display
+      run: echo ${{ steps.pr-url.outputs.url }} 
       
     - uses: ravsamhq/notify-slack-action@v2
       if: ${{ needs.quality-Apex.outputs.output1 == 'failure' && needs.quality-LWC.outputs.output1 == 'failure'}}
@@ -128,41 +135,18 @@ jobs:
           status: ${{ job.status }}
           token: ${{ github.token }}
           notification_title: 'Vulnerabilidades encontradas no ${{ github.head_ref }}'
-          message_format: ':large_orange_diamond: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} Necessária ação do time de segurança, acesse para rejeitar/aprovar a PR'
-          footer: "link do repositório <{repo_url}|{repo}> | {workflow_url}"
+          message_format: ':large_orange_diamond: ${{ steps.pr-url.outputs.url }},  Necessária ação do time de segurança, acesse para rejeitar/aprovar a PR'
+          footer: 'link do repositório <{repo_url}|{repo}> | {workflow_url}'
       env:
           SLACK_WEBHOOK_URL: ${{ secrets.ACTION_SLACK }}
-              
+  
     - uses: ravsamhq/notify-slack-action@v2
       if: always()
       with:
           status: ${{ job.status }}
           token: ${{ github.token }}
-          notification_title: '{branch} foi executado com {status_message}'
+          notification_title: '{branch} foi executado com :x:'
           message_format: '{emoji} {workflow} {status_message} enviado por ${{ github.event.head_commit.author.name }} <{commit_url}|{commit_sha}> com os seguintes resultados de teste apex :x: e lwc :x:'
           footer: link do repositório <{repo_url}|{repo}> | ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
       env:
           SLACK_WEBHOOK_URL: ${{ secrets.RELEASE_TEAM_SLACK }}
-
-  pr-actions:
-    name: Ações Pull Request
-    if: ${{ github.event.issue.pull_request }}
-    runs-on: ubuntu-latest
-    needs: [comunicacoes]
-    permissions:
-      contents: write
-    steps:
-      
-      - uses: danielswensson/auto-assign-owner-action@v1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - uses: github/lock@v2.1.1
-        id: lock
-        if: ${{ needs.quality-Apex.outputs.output1 == 'failure' && needs.quality-LWC.outputs.output1 == 'failure'}}
-        with:
-          mode: "lock"
-          reason: "Encontrados erros na execução de qualidade de código, necessária ações do time de securança"
-          environment: ${GITHUB_REF}
-
-          
