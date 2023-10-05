@@ -1,5 +1,4 @@
 name: Validação de Qualidade
-run-name: ${{ github.actor }}
 
 on:
   push:
@@ -55,6 +54,7 @@ jobs:
           sfdx scanner:run -f junit -s 3 --normalize-severity -t "force-app" -e "pmd" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-apex.xml
 
       - uses: actions/upload-artifact@v3
+        if: success() || failure()
         with:
           name: cli-scan-report
           path: reports/scan-apex.xml
@@ -68,6 +68,7 @@ jobs:
           
       - name: Detalhes dos testes
         uses: test-summary/action@v2
+        if: success() || failure()
         with:
            paths: reports/scan-apex.xml
   
@@ -105,23 +106,22 @@ jobs:
         id: lwc_status
         run: |
             sfdx scanner:run -f junit -s 3 --normalize-severity -t "force-app" -e "eslint" --outfile ./reports/scan-lwc.xml
-        continue-on-error: true
 
       - uses: actions/upload-artifact@v3
-        if: always()
+        if: success() || failure()
         with:
           name: cli-scan-report
           path: reports/scan-lwc.xml
 
       - name: Publicar resultado dos testes sumarizado
         uses: mikepenz/action-junit-report@v4
-        if: always()
+        if: success() || failure()
         with:
           report_paths: 'reports/scan-lwc.xml' 
           check_name: "Qualidade de código LWC"
             
       - name: Detalhes dos testes
-        if: always()
+        if: success() || failure()
         uses: test-summary/action@v2
         with:
           paths: reports/scan-lwc.xml   
