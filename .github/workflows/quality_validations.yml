@@ -131,6 +131,7 @@ jobs:
     name: Notificações e alertas
     runs-on: ubuntu-latest
     needs: [quality-Apex, quality-LWC]
+    if: always()
     steps:
 
 
