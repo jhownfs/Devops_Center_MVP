@@ -8,7 +8,7 @@ on:
     paths:
         - 'force-app/**'
   pull_request:
-    types: [opened, edited]
+    types: [opened, edited, submitted]
     branches:
         - main
         - Staging
@@ -123,47 +123,6 @@ jobs:
         with:
           paths: reports/scan-lwc.xml   
 
-  quality-FLOW:  
-    name: Qualidade FLOW
-    runs-on: ubuntu-latest  
-    outputs:
-      output1: ${{ steps.flw_status.outputs.outcome }}   
-    permissions:
-      checks: write
-      contents: read 
-      
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-                
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-      
-      - name: Instalar o gerenciador de pacotes NPM
-        run: |
-          npm install
-      
-      - name: Instalar the SFDX CLI
-        run: |
-          npm install sfdx-cli --global
-      
-      - name: Instalar o SFDX CLI Scanner
-        run: |
-          echo 'y' | sfdx plugins:install lightning-flow-scanner
-      
-      - name: Validacao Flow
-        id: flw_status
-        run: |
-          sfdx flow:scan -d .\force-app\
-        continue-on-error: true
-
-      - name: Validacao msg
-        run: |
-          echo ${{ steps.flw_status.outcome }}
-        
-
   comunicacoes:
     name: Notificações e alertas
     runs-on: ubuntu-latest
@@ -176,7 +135,7 @@ jobs:
           status: ${{ job.status }}
           token: ${{ github.token }}
           notification_title: "Vulnerabilidades encontradas no {workflow}"
-          message_format: "{emoji} *{workflow}* Necessária ação do time de segurança, acesse para rejeitar/aprovar a PR"
+          message_format: ":large_orange_diamond: *{workflow}* Necessária ação do time de segurança, acesse para rejeitar/aprovar a PR"
           footer: "link do repositório <{repo_url}|{repo}> | <{workflow_url}>"
       env:
           SLACK_WEBHOOK_URL: ${{ secrets.ACTION_SLACK }}
@@ -187,7 +146,46 @@ jobs:
           status: ${{ job.status }}
           token: ${{ github.token }}
           notification_title: "{workflow} foi executado com {status_message}"
-          message_format: "{emoji} *{workflow}* {status_message} no <{repo_url}|{repo}>"
+          message_format: "{emoji} *{workflow}* {status_message} no <{repo_url}|{repo}> com testes do apex {needs.quality-Apex.outputs.output1}"
           footer: link do repositório <{repo_url}|{repo}> | <{workflow_url}>"
       env:
           SLACK_WEBHOOK_URL: ${{ secrets.RELEASE_TEAM_SLACK }}
+
+    - name: Enviar email
+      uses: dawidd6/action-send-mail@v3
+      if: always()
+      with:
+        server_address: smtp.gmail.com
+        # Server port, default 25:
+        server_port: 465
+        # Optional whether this connection use TLS (default is true if server_port is 465)
+        secure: true
+        # Required mail subject:
+        subject: "{workflow} foi executado com {status_message}"
+        # Required recipients' addresses:
+        to: jhown_fs@hotmail.com
+        # Required sender full name (address can be skipped):
+        from: CI/CD GitHub
+        body: "{emoji} *{workflow}* {status_message} no <{repo_url}|{repo}>"
+        ignore_cert: true
+        convert_markdown: true
+        # Optional attachments:
+        attachments: reports/scan-lwc.xml
+        # Optional priority: 'high', 'normal' (default) or 'low'
+        priority: normal
+
+  pr-actions:
+    name: Notificações e alertas
+    if: ${{ github.event.issue.pull_request }}
+    runs-on: ubuntu-latest
+    needs: [comunicacoes]
+    permissions:
+      contents: write
+    steps:
+      
+      - uses: github/lock@v2.1.1
+        id: lock
+        with:
+          mode: "lock"
+          reason: "Encontrados erros na execução de qualidade de código, necessária ações do time de securança"
+          environment: ${GITHUB_REF}
