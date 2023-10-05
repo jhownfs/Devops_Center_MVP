@@ -121,7 +121,7 @@ jobs:
       - name: Detalhes dos testes
         uses: test-summary/action@v2
         with:
-          paths: reports/scan-apex.xml    
+          paths: reports/scan-lwc.xml   
 
   quality-FLOW:  
     name: Qualidade FLOW

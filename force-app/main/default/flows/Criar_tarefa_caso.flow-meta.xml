@@ -5,7 +5,6 @@
     <interviewLabel>Criar tarefa caso {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Criar tarefa caso</label>
     <processMetadataValues>
-        
         <name>BuilderType</name>
         <value>
             <stringValue>LightningFlowBuilder</stringValue>
@@ -44,7 +43,7 @@
         <inputAssignments>
             <field>OwnerId</field>
             <value>
-                <stringValue>0056s000006Ga73</stringValue>
+                <stringValue>0056s000006Ga55</stringValue>
             </value>
         </inputAssignments>
         <inputAssignments>
