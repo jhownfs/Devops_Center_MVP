@@ -9,9 +9,6 @@ public class AttachCampaings {
 
 
 
-
-
-      
     }
 
     public static String InsertCampaings(List<Campaign> lstCampaign){

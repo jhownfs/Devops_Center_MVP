@@ -134,8 +134,8 @@ jobs:
       with:
           status: ${{ job.status }}
           token: ${{ github.token }}
-          notification_title: "Vulnerabilidades encontradas no {workflow}"
-          message_format: ":large_orange_diamond: *{workflow}* Necessária ação do time de segurança, acesse para rejeitar/aprovar a PR"
+          notification_title: 'Vulnerabilidades encontradas no ${{ github.head_ref }}'
+          message_format: ':large_orange_diamond: *{commit_url}* Necessária ação do time de segurança, acesse para rejeitar/aprovar a PR'
           footer: "link do repositório <{repo_url}|{repo}> | <{workflow_url}>"
       env:
           SLACK_WEBHOOK_URL: ${{ secrets.ACTION_SLACK }}
@@ -145,37 +145,14 @@ jobs:
       with:
           status: ${{ job.status }}
           token: ${{ github.token }}
-          notification_title: "{workflow} foi executado com {status_message}"
-          message_format: "{emoji} *{workflow}* {status_message} no <{repo_url}|{repo}> com testes do apex {needs.quality-Apex.outputs.output1}"
+          notification_title: '${{ github.event }} foi executado com {status_message}'
+          message_format: '{emoji} *{workflow}* {status_message} no <{commit_url}|{commit_sha}> com testes do apex ${{needs.quality-Apex.outputs.output1}} and ${{needs.quality-LWC.outputs.output1}}'
           footer: link do repositório <{repo_url}|{repo}> | <{workflow_url}>"
       env:
           SLACK_WEBHOOK_URL: ${{ secrets.RELEASE_TEAM_SLACK }}
 
-    - name: Enviar email
-      uses: dawidd6/action-send-mail@v3
-      if: always()
-      with:
-        server_address: smtp.gmail.com
-        # Server port, default 25:
-        server_port: 465
-        # Optional whether this connection use TLS (default is true if server_port is 465)
-        secure: true
-        # Required mail subject:
-        subject: "{workflow} foi executado com {status_message}"
-        # Required recipients' addresses:
-        to: jhown_fs@hotmail.com
-        # Required sender full name (address can be skipped):
-        from: CI/CD GitHub
-        body: "{emoji} *{workflow}* {status_message} no <{repo_url}|{repo}>"
-        ignore_cert: true
-        convert_markdown: true
-        # Optional attachments:
-        attachments: reports/scan-lwc.xml
-        # Optional priority: 'high', 'normal' (default) or 'low'
-        priority: normal
-
   pr-actions:
-    name: Notificações e alertas
+    name: Ações Pull Request
     if: ${{ github.event.issue.pull_request }}
     runs-on: ubuntu-latest
     needs: [comunicacoes]
