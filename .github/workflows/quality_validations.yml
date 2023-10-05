@@ -60,16 +60,16 @@ jobs:
           name: cli-scan-report
           path: reports/scan-apex.xml
 
-#      - name: Publicar resultado dos testes sumarizado
-#        uses: mikepenz/action-junit-report@v4
-#        if: success() || failure()
-#        with:
-#          report_paths: 'reports/scan-apex.xml' 
+      - name: Publicar resultado dos testes sumarizado
+        uses: mikepenz/action-junit-report@v4
+        if: success() || failure()
+        with:
+          report_paths: 'reports/scan-apex.xml' 
           
-#      - name: Detalhes dos testes
-#        uses: test-summary/action@v2
-#        with:
-#          paths: reports/scan-apex.xml
+      - name: Detalhes dos testes
+        uses: test-summary/action@v2
+        with:
+           paths: reports/scan-apex.xml
   
   quality-LWC:  
     name: Qualidade LWC
@@ -112,6 +112,17 @@ jobs:
           name: cli-scan-report
           path: reports/scan-lwc.xml
 
+      - name: Publicar resultado dos testes sumarizado
+        uses: mikepenz/action-junit-report@v4
+        if: success() || failure()
+        with:
+          report_paths: 'reports/scan-lwc.xml' 
+            
+      - name: Detalhes dos testes
+        uses: test-summary/action@v2
+        with:
+          paths: reports/scan-apex.xml    
+
   quality-FLOW:  
     name: Qualidade FLOW
     runs-on: ubuntu-latest  
@@ -145,7 +156,7 @@ jobs:
       - name: Validacao Flow
         id: flw_status
         run: |
-          sfdx flow:scan -d .\force-app\ -f error
+          sfdx flow:scan -d .\force-app\
         continue-on-error: true
 
       - name: Validacao msg
