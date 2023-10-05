@@ -17,10 +17,15 @@ export default class Campainlist extends LightningElement {
         }
         
     })
+    
   }
 
   addContent(){
-    const elem = this.template.querySelector("div");
-    elem.innerHTML = "<script>malicious</script>";
+  const elem = this.template.querySelector("div");
+  elem.innerHTML = "<script>malicious</script>";
+
+
+
   }
+  
 }
