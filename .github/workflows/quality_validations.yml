@@ -3,7 +3,7 @@ run-name: ${{ github.actor }}
 
 on:
   pull_request:
-    types: [opened, edited]
+    types: [opened, edited, synchronize]
     branches:
         - main
         - Staging
