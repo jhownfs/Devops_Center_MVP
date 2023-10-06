@@ -52,34 +52,13 @@ jobs:
       - name: Rodar Scanner para Salesforce Apex
         id: apex_status
         run: |
-          sfdx scanner:run -f sarif -s 3 --normalize-severity -t "force-app" -e "pmd" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-apex.sarif
-
+          sfdx scanner:run -f junit -s 3 --normalize-severity -t "force-app" -e "pmd" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-apex.xml
 
       - name: Upload SARIF file
         uses: github/codeql-action/upload-sarif@v1
         with:
-          sarif_file: reports/scan-apex.sarif
+          sarif_file: 'reports/scan-apex.xml' 
 
-
-#      - uses: actions/upload-artifact@v3
-#        if: success() || failure()
-#        with:
-#          name: cli-scan-report
-#          path: reports/scan-apex.xml
-
-#      - name: Publicar resultado dos testes sumarizado
-#        uses: mikepenz/action-junit-report@v4
-#        if: success() || failure()
-#        with:
-#          report_paths: 'reports/scan-apex.xml' 
-#          check_name: "Qualidade de código Apex"
-          
-#      - name: Detalhes dos testes
-#        uses: test-summary/action@v2
-#        if: success() || failure()
-#        with:
-#           paths: reports/scan-apex.xml
-  
   quality-LWC:  
     name: Qualidade LWC
     runs-on: ubuntu-latest  
@@ -169,25 +148,3 @@ jobs:
           footer: link do repositório <{repo_url}|{repo}> | ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
       env:
           SLACK_WEBHOOK_URL: ${{ secrets.RELEASE_TEAM_SLACK }}
-
-    - name: Send mail
-      uses: dawidd6/action-send-mail@v3
-      with:
-        connection_url: ${{secrets.MAIL_CONNECTION}}
-        server_address: smtp.live.com
-        server_port: 465
-        # Optional whether this connection use TLS (default is true if server_port is 465)
-        secure: true
-        # Required mail subject:
-        subject: Github Actions job result
-        # Required recipients' addresses:
-        to: jhown_fs@hotmail.com
-        # Required sender full name (address can be skipped):
-        from: Devops team# <user@example.com>
-        # Optional plain body:
-        body: Build job of ${{github.repository}} completed successfully!
-        ignore_cert: true
-        # Optional attachments:
-        attachments: reports/scan-lwc.xml
-        # Optional priority: 'high', 'normal' (default) or 'low'
-        priority: low
