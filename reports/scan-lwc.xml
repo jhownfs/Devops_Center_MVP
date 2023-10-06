@@ -1,0 +1,104 @@
+<testsuites>
+<testsuite name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\classes\AttachCampaings.cls" tests="4" errors="4">
+<testcase name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\classes\AttachCampaings.cls">
+<failure message="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\classes\AttachCampaings.cls: 1 Missing ApexDoc comment" type="3">
+3: Missing ApexDoc comment
+Category: Documentation - ApexDoc
+File: D:\CICD\Github\Devops_Center_MVP\force-app\main\default\classes\AttachCampaings.cls
+Line: 1
+Column: 27
+URL: https://pmd.github.io/pmd-6.55.0/pmd_rules_apex_documentation.html#apexdoc
+</failure>
+</testcase>
+<testcase name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\classes\AttachCampaings.cls">
+<failure message="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\classes\AttachCampaings.cls: 3 Missing ApexDoc comment" type="3">
+3: Missing ApexDoc comment
+Category: Documentation - ApexDoc
+File: D:\CICD\Github\Devops_Center_MVP\force-app\main\default\classes\AttachCampaings.cls
+Line: 3
+Column: 33
+URL: https://pmd.github.io/pmd-6.55.0/pmd_rules_apex_documentation.html#apexdoc
+</failure>
+</testcase>
+<testcase name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\classes\AttachCampaings.cls">
+<failure message="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\classes\AttachCampaings.cls: 11 Missing ApexDoc comment" type="3">
+3: Missing ApexDoc comment
+Category: Documentation - ApexDoc
+File: D:\CICD\Github\Devops_Center_MVP\force-app\main\default\classes\AttachCampaings.cls
+Line: 11
+Column: 26
+URL: https://pmd.github.io/pmd-6.55.0/pmd_rules_apex_documentation.html#apexdoc
+</failure>
+</testcase>
+<testcase name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\classes\AttachCampaings.cls">
+<failure message="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\classes\AttachCampaings.cls: 1 Parsing error: Unexpected reserved word &#39;public&#39;. (1:0)" type="2">
+2: Parsing error: Unexpected reserved word &#39;public&#39;. (1:0)
+Category: Scanner Internal - files-must-compile
+File: D:\CICD\Github\Devops_Center_MVP\force-app\main\default\classes\AttachCampaings.cls
+Line: 1
+Column: 0
+URL: 
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\classes\AttachCampaings.cls-meta.xml" tests="1" errors="1">
+<testcase name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\classes\AttachCampaings.cls-meta.xml">
+<failure message="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\classes\AttachCampaings.cls-meta.xml: 1 Parsing error: Unexpected token (1:0)" type="2">
+2: Parsing error: Unexpected token (1:0)
+Category: Scanner Internal - files-must-compile
+File: D:\CICD\Github\Devops_Center_MVP\force-app\main\default\classes\AttachCampaings.cls-meta.xml
+Line: 1
+Column: 0
+URL: 
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\jsconfig.json" tests="1" errors="1">
+<testcase name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\jsconfig.json">
+<failure message="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\jsconfig.json: 2 Parsing error: Missing semicolon. (2:21)" type="2">
+2: Parsing error: Missing semicolon. (2:21)
+Category: Scanner Internal - files-must-compile
+File: D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\jsconfig.json
+Line: 2
+Column: 21
+URL: 
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\flows\Criar_tarefa_caso.flow-meta.xml" tests="1" errors="1">
+<testcase name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\flows\Criar_tarefa_caso.flow-meta.xml">
+<failure message="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\flows\Criar_tarefa_caso.flow-meta.xml: 1 Parsing error: Unexpected token (1:0)" type="2">
+2: Parsing error: Unexpected token (1:0)
+Category: Scanner Internal - files-must-compile
+File: D:\CICD\Github\Devops_Center_MVP\force-app\main\default\flows\Criar_tarefa_caso.flow-meta.xml
+Line: 1
+Column: 0
+URL: 
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\campainlist.html" tests="1" errors="1">
+<testcase name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\campainlist.html">
+<failure message="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\campainlist.html: 1 Parsing error: This experimental syntax requires enabling one of the following parser plugin(s): &quot;jsx&quot;, &quot;flow&quot;, &quot;typescript&quot;. (1:0)" type="2">
+2: Parsing error: This experimental syntax requires enabling one of the following parser plugin(s): &quot;jsx&quot;, &quot;flow&quot;, &quot;typescript&quot;. (1:0)
+Category: Scanner Internal - files-must-compile
+File: D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\campainlist.html
+Line: 1
+Column: 0
+URL: 
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\campainlist.js-meta.xml" tests="1" errors="1">
+<testcase name="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\campainlist.js-meta.xml">
+<failure message="D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\campainlist.js-meta.xml: 1 Parsing error: Unexpected token (1:0)" type="2">
+2: Parsing error: Unexpected token (1:0)
+Category: Scanner Internal - files-must-compile
+File: D:\CICD\Github\Devops_Center_MVP\force-app\main\default\lwc\campainlist\campainlist.js-meta.xml
+Line: 1
+Column: 0
+URL: 
+</failure>
+</testcase>
+</testsuite>
+</testsuites>

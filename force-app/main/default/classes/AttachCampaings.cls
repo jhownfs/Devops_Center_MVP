@@ -4,18 +4,20 @@ public class AttachCampaings {
        
       List<Account> lstCupons = [SELECT Id, Name FROM Account];
 
-      return lstCupons;          
+      return lstCupons;
 
-
-
-      
     }
 
-    public static String InsertCampaings(List<Campaign> lstCampaign){
+    public static String insertCampaings(List<Campaign> lstCampaign){
        
-        String msg = 'Sucess';
-        insert lstCampaign;  
+      String msg = 'Sucess';
 
-        return msg;
-    }
+    //  if (Schema.sObjectType.Campaign.isCreateable()) {
+
+         insert lstCampaign;  
+
+    //  }
+
+      return msg;
+  }
 }
