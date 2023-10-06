@@ -43,7 +43,7 @@ jobs:
 
       - name: Instalar the SFDX CLI
         run: |
-          npm instalar sfdx-cli --global
+          npm install sfdx-cli --global
 
       - name: Instalar o SFDX CLI Scanner
         run: |
@@ -106,7 +106,7 @@ jobs:
       - name: Validacao
         id: lwc_status
         run: |
-            sfdx scanner:run -f junit -s 3 --normalize-severity -t "force-app" -e "eslint" --outfile ./reports/scan-lwc.xml
+            sfdx scanner:run -f junit -s 3 --normalize-severity -t "force-app" -e "eslint-lwc" --outfile ./reports/scan-lwc.xml
 
       - uses: actions/upload-artifact@v3
         if: success() || failure()
