@@ -55,6 +55,7 @@ jobs:
           sfdx scanner:run -f junit -s 3 --normalize-severity -t "force-app" -e "pmd" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-apex.xml
 
       - name: Upload SARIF file
+        if: always()
         uses: github/codeql-action/upload-sarif@v1
         with:
           sarif_file: 'reports/scan-apex.xml' 
