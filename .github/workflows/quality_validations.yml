@@ -1,0 +1,164 @@
+name: Validação de Qualidade
+run-name: Commit ${{ github.event.head_commit.message }} enviado por @${{ github.actor }}
+
+on:
+  push:
+    branches:
+      - main
+      - Staging
+      - UAT
+      - SIT
+      
+  pull_request:
+    types: [opened, edited, synchronize]
+    branches:
+        - main
+        - Staging
+        - UAT
+        - SIT
+
+jobs:
+  quality-Apex:
+    name: Qualidade APEX
+    runs-on: ubuntu-latest
+    outputs:
+      output1: ${{ steps.apex_status.outcome }}  
+    permissions:
+      checks: write
+      contents: read 
+
+    steps:
+    
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: instalar as dependencias dos pacotes
+        run: |
+          npm install
+
+      - name: Instalar the SFDX CLI
+        run: |
+          npm instalar sfdx-cli --global
+
+      - name: Instalar o SFDX CLI Scanner
+        run: |
+          echo 'y' | sfdx plugins:install @salesforce/sfdx-scanner
+  
+      - name: Rodar Scanner para Salesforce Apex
+        id: apex_status
+        run: |
+          sfdx scanner:run -f junit -s 3 --normalize-severity -t "force-app" -e "pmd" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-apex.xml
+
+      - uses: actions/upload-artifact@v3
+        if: success() || failure()
+        with:
+          name: cli-scan-report
+          path: reports/scan-apex.xml
+
+      - name: Publicar resultado dos testes sumarizado
+        uses: mikepenz/action-junit-report@v4
+        if: success() || failure()
+        with:
+          report_paths: 'reports/scan-apex.xml' 
+          check_name: "Qualidade de código Apex"
+          
+      - name: Detalhes dos testes
+        uses: test-summary/action@v2
+        if: success() || failure()
+        with:
+           paths: reports/scan-apex.xml
+  
+  quality-LWC:  
+    name: Qualidade LWC
+    runs-on: ubuntu-latest  
+    outputs:
+      output1: ${{ steps.lwc_status.outcome }}   
+    permissions:
+      checks: write
+      contents: read 
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Instalar as dependencias dos pacotes
+        run: |
+          npm install
+
+      - name: Instalar the SFDX CLI
+        run: |
+          npm install sfdx-cli --global
+
+      - name: Instalar o SFDX CLI Scanner
+        run: |
+          echo 'y' | sfdx plugins:install @salesforce/sfdx-scanner
+
+      - name: Validacao
+        id: lwc_status
+        run: |
+            sfdx scanner:run -f junit -s 3 --normalize-severity -t "force-app" -e "eslint" --outfile ./reports/scan-lwc.xml
+
+      - uses: actions/upload-artifact@v3
+        if: success() || failure()
+        with:
+          name: cli-scan-report
+          path: reports/scan-lwc.xml
+
+      - name: Publicar resultado dos testes sumarizado
+        uses: mikepenz/action-junit-report@v4
+        if: success() || failure()
+        with:
+          report_paths: 'reports/scan-lwc.xml' 
+          check_name: "Qualidade de código LWC"
+            
+      - name: Detalhes dos testes
+        if: success() || failure()
+        uses: test-summary/action@v2
+        with:
+          paths: reports/scan-lwc.xml   
+
+  comunicacoes:
+    name: Notificações e alertas
+    runs-on: ubuntu-latest
+    needs: [quality-Apex, quality-LWC]
+    if: always()
+    steps:
+
+
+    - name: getPrUrl
+      id: pr-url
+      uses: ammaratef45/pr-url-action@v1
+    - name: display
+      run: echo ${{ steps.pr-url.outputs.url }} 
+      
+    - uses: ravsamhq/notify-slack-action@v2
+      if: ${{ needs.quality-Apex.outputs.output1 == 'failure' && needs.quality-LWC.outputs.output1 == 'failure'}}
+      with:
+          status: ${{ job.status }}
+          token: ${{ github.token }}
+          notification_title: 'Vulnerabilidades encontradas no ${{ github.head_ref }}'
+          message_format: ':large_orange_diamond: ${{ steps.pr-url.outputs.url }},  Necessária ação do time de segurança, acesse para rejeitar/aprovar a PR'
+          footer: 'link do repositório <{repo_url}|{repo}> | {workflow_url}'
+      env:
+          SLACK_WEBHOOK_URL: ${{ secrets.ACTION_SLACK }}
+  
+    - uses: ravsamhq/notify-slack-action@v2
+      if: always()
+      with:
+          status: ${{ job.status }}
+          token: ${{ github.token }}
+          notification_title: '{branch} foi executado com :x:'
+          message_format: '{emoji} {workflow} {status_message} enviado por ${{ github.event.head_commit.author.name }} <{commit_url}|{commit_sha}> com os seguintes resultados de teste apex :x: e lwc :x:'
+          footer: link do repositório <{repo_url}|{repo}> | ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+      env:
+          SLACK_WEBHOOK_URL: ${{ secrets.RELEASE_TEAM_SLACK }}
