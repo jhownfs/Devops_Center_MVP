@@ -11,7 +11,7 @@ on:
         - SIT
 
 jobs:
-quality-Apex:
+ quality-Apex:
     name: Qualidade APEX
     runs-on: ubuntu-latest
     outputs:
@@ -66,7 +66,7 @@ quality-Apex:
         with:
            paths: reports/scan-apex.xml
   
-quality-LWC:  
+ quality-LWC:  
     name: Qualidade LWC
     runs-on: ubuntu-latest  
     outputs:
@@ -120,7 +120,7 @@ quality-LWC:
         with:
           paths: reports/scan-lwc.xml
 
-testes-apex-plataforma:
+ testes-apex-plataforma:
     name: Checkonly com testes do apex
     runs-on: ubuntu-latest
     needs: [quality-Apex, quality-LWC]
@@ -134,23 +134,23 @@ testes-apex-plataforma:
      - name: 'Popula as informações  para conectar no ambiente destino'
        shell: bash
        run: |
-         if echo ${{ github.event.pull_request.base.ref == "SIT"}}
+         if echo ${{ github.event.pull_request.base.ref == 'SIT'}}
          then 
-           echo ${{ secrets.SDBX_URL}} > $ORG_URL
-           echo ${{ secrets.SIT_KEY}} > $CLIENTID
-           echo ${{ secrets.SIT_USERNAME}} > $USERNAME
-         else if ${{ github.event.pull_request.base.ref == "UAT"}}
-          echo ${{ secrets.SDBX_URL}} > $ORG_URL
-          echo ${{ secrets.UAT_KEY}} > $CLIENTID
-          echo ${{ secrets.UAT_USERNAME}} > $USERNAME
-         else if ${{ github.event.pull_request.base.ref == "Staging"}}
-          echo ${{ secrets.SDBX_URL}} > $ORG_URL
-          echo ${{ secrets.STAGING_KEY}} > $CLIENTID
-          echo ${{ secrets.STAGING_USERNAME}} > $USERNAME
+           echo "ORG_URL=${{ secrets.SDBX_URL}}" >> $GITHUB_ENV
+           echo "CLIENTID=${{ secrets.SIT_KEY}}" >> $GITHUB_ENV
+           echo "USERNAME=${{ secrets.SIT_USERNAME}}" >> $GITHUB_ENV
+         else if ${{ github.event.pull_request.base.ref == 'UAT'}}
+          echo "ORG_URL=${{ secrets.SDBX_URL}}" >> $GITHUB_ENV
+          echo "CLIENTID=${{ secrets.UAT_KEY}}" >> $GITHUB_ENV
+          echo "USERNAME=${{ secrets.UAT_USERNAME}}" >> $GITHUB_ENV
+         else if ${{ github.event.pull_request.base.ref == 'Staging'}}
+          echo "ORG_URL=${{ secrets.SDBX_URL}}" >> $GITHUB_ENV
+          echo "CLIENTID=${{ secrets.STAGING_KEY}}" >> $GITHUB_ENV
+          echo "USERNAME=${{ secrets.STAGING_USERNAME}}" >> $GITHUB_ENV
          else
-          echo ${{ secrets.PROD_URL}} > $ORG_URL
-          echo ${{ secrets.PROD_KEY}} > $CLIENTID
-          echo ${{ secrets.PROD_USERNAME}} > $USERNAME
+          echo "ORG_URL=${{ secrets.PROD_URL}}" >> $GITHUB_ENV
+          echo "CLIENTID=${{ secrets.PROD_KEY}}" >> $GITHUB_ENV
+          echo "USERNAME=${{ secrets.PROD_USERNAME}}" >> $GITHUB_ENV
          fi
       
      - name: 'Salesforce Autentication'
@@ -160,7 +160,7 @@ testes-apex-plataforma:
      - name: 'Deploy the entire branch to Integration org'
        run: sf project deploy start -d force-app -o SFDX -l RunLocalTests --dry-run
 
-comunicacoes:
+ comunicacoes:
     name: Notificações e alertas
     runs-on: ubuntu-latest
     needs: [testes-apex-plataforma]
