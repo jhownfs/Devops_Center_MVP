@@ -9,6 +9,10 @@ on:
         - Staging
         - UAT
         - SIT
+env:
+  USERNAME: ${{ secrets.PROD_USERNAME }}
+  CLIENTID: ${{ secrets.PROD_KEY }}
+  ORG_URL:  ${{ secrets.PROD_URL }}
 
 jobs:
  quality-Apex:
@@ -155,7 +159,7 @@ jobs:
       
      - name: 'Salesforce Autentication'
        run: | 
-        sf org login jwt --username  ${{ USERNAME }} --jwt-key-file /JWT/server.key --client-id ${{ CLIENTID }} --alias SFDX  --instance-url ${{ ORG_URL }}
+        sf org login jwt --username $USERNAME --jwt-key-file jwt/server.key --client-id $CLIENTID --alias SFDX  --instance-url $ORG_URL
 
      - name: 'Deploy the entire branch to Integration org'
        run: sf project deploy start -d force-app -o SFDX -l RunLocalTests --dry-run
