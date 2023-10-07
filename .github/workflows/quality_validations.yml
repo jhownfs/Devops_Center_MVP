@@ -1,14 +1,7 @@
 name: Validação de Qualidade
 run-name: Commit ${{ github.event.head_commit.message }} enviado por @${{ github.actor }}
 
-on:
-  push:
-    branches:
-      - main
-      - Staging
-      - UAT
-      - SIT
-      
+on:    
   pull_request:
     types: [opened, edited, synchronize]
     branches:
