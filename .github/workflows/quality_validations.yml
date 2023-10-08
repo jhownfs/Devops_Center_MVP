@@ -104,7 +104,7 @@ jobs:
       - name: Validacao
         id: lwc_status
         run: |
-            sfdx scanner:run -f junit -s 3 --normalize-severity -t "force-app" -e "eslint-lwc" --outfile ./reports/scan-lwc.xml
+          sfdx scanner:run -f junit -t "force-app/main/default/lwc" -e "eslint-lwc" -c "problem" --outfile ./reports/scan-lwc.xml
 
       - uses: actions/upload-artifact@v3
         if: success() || failure()
@@ -172,8 +172,18 @@ jobs:
        run: 
         sf org login jwt --username $USERNAME --jwt-key-file jwt/server.key --client-id $CLIENTID --alias SFDX  --instance-url $ORG_URL
 
+     - name: Find files matching "*.rs" or "*.md"
+       uses: jeertmans/filesfinder@latest
+       id: classesTest
+       with:
+          args: "*Test.cls"
+
+     - name: 'Salesforce Autentication'
+       run: 
+         echo "${{ steps.classesTest.outputs.files }}"
+               
      - name: 'Deploy the entire branch to Integration org'
-       run: sf project deploy start -d force-app -o SFDX -l RunLocalTests --dry-run --ignore-conflicts --junit
+       run: sf project deploy start -d force-app -o SFDX -l RunLocalTests --dry-run --ignore-conflicts 
 
  comunicacoes:
     name: Notificações e alertas

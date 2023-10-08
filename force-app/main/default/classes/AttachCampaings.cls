@@ -1,16 +1,18 @@
 public with sharing class AttachCampaings {
     
-    public static List<Account> getCupons(){
+    @AuraEnabled
+    public static List<Cupom__c> getCupons(){
        
-      List<Account> lstCupons = [SELECT Id, Name FROM Account WITH USER_MODE];
+      List<Cupom__c> lstCupons = [SELECT Id, Name, Desconto__c FROM Cupom__c WHERE Ativo__c = TRUE WITH USER_MODE];
 
       return lstCupons;
 
     }
 
+    @AuraEnabled
     public static String insertCampaings(List<Campaign> lstCampaign){
        
-      String msg = 'Sucess';
+      String msg = 'Sucesso';
 
       if (Schema.sObjectType.Campaign.isCreateable()) {
 
