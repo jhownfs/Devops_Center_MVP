@@ -166,8 +166,7 @@ jobs:
 
      - name: 'Salesforce Autentication'
        run: | 
-        echo $USERNAME e $CLIENTID e $ORG_URL e no ambiente ${{ github.event.pull_request.base.ref }}
-        ls
+        echo ls
         sf org login jwt --username $USERNAME --jwt-key-file ./jwt/server.key --client-id $CLIENTID --alias SFDX  --instance-url $ORG_URL
 
      - name: 'Deploy the entire branch to Integration org'
@@ -203,7 +202,7 @@ jobs:
           status: ${{ job.status }}
           token: ${{ github.token }}
           notification_title: ' {branch}foi executado com $STATUS'
-          message_format: '{emoji} {workflow} {status_message} enviado por ${{ github.event.head_commit.author.name }} <{commit_url}|{commit_sha}> com os seguintes resultados de teste apex $STATUS e lwc $STATUS'
+          message_format: '{emoji} {workflow} {status_message} enviado por ${{ github.event.head_commit.author.name }} <{commit_url}|{commit_sha}> com os seguintes resultados de teste apex {STATUS} e lwc {STATUS}'
           footer: link do repositório <{repo_url}|{repo}> | ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
       env:
           SLACK_WEBHOOK_URL: ${{ secrets.RELEASE_TEAM_SLACK }}
