@@ -129,6 +129,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: [quality-Apex, quality-LWC]
     steps:
+
+     - uses: actions/setup-node@v3
+       with:
+         node-version: '16'
      
      - name: 'Instalação SFDX'
        run: | 
@@ -158,9 +162,10 @@ jobs:
           echo "CLIENTID=${{ secrets.PROD_KEY}}" >> $GITHUB_ENV
           echo "USERNAME=${{ secrets.PROD_USERNAME}}" >> $GITHUB_ENV
          fi
-      
+
      - name: 'Salesforce Autentication'
        run: | 
+        echo $USERNAME e $CLIENTID e $ORG_URL
         sf org login jwt --username $USERNAME --jwt-key-file jwt/server.key --client-id $CLIENTID --alias SFDX  --instance-url $ORG_URL
 
      - name: 'Deploy the entire branch to Integration org'
