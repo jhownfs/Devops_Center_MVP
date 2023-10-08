@@ -131,6 +131,10 @@ jobs:
     needs: [quality-Apex, quality-LWC]
     steps:
 
+     - uses: actions/checkout@v3
+       with:
+        fetch-depth: 0
+
      - uses: actions/setup-node@v3
        with:
          node-version: '16'
@@ -166,8 +170,8 @@ jobs:
 
      - name: 'Salesforce Autentication'
        run: 
-          ls
-        
+        sf org login jwt --username $USERNAME --jwt-key-file jwt/server.key --client-id $CLIENTID --alias SFDX  --instance-url $ORG_URL
+
      - name: 'Deploy the entire branch to Integration org'
        run: sf project deploy start -d force-app -o SFDX -l RunLocalTests --dry-run
 
