@@ -136,7 +136,7 @@ jobs:
      
      - name: 'Instalação SFDX'
        run: | 
-         npm install sfdx-cli --global
+         npm install @salesforce/cli --global
       
      # Store secret for both otgs
      - name: 'Popula as informações  para conectar no ambiente destino'
