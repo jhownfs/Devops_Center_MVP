@@ -15,9 +15,17 @@ env:
   ORG_URL:  ${{ secrets.PROD_URL }}
 
 jobs:
+ adicionar-Reviews:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: kentaro-m/auto-assign-action@v1.2.5
+        with:
+          configuration-path: '.github/reviews.yml'
+
  quality-Apex:
     name: Qualidade APEX
     runs-on: ubuntu-latest
+    needs: [adicionar-Reviews]
     outputs:
       output1: ${{ steps.apex_status.outcome }}  
     permissions:
@@ -73,6 +81,7 @@ jobs:
  quality-LWC:  
     name: Qualidade LWC
     runs-on: ubuntu-latest  
+    needs: [adicionar-Reviews]
     outputs:
       output1: ${{ steps.lwc_status.outcome }}   
     permissions:
