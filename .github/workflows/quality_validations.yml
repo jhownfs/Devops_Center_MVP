@@ -1,7 +1,7 @@
 name: Validação de Qualidade
-run-name: ${{ github.actor }}
+run-name: PR ${{ github.event.head_commit.message }} enviado por ${{ github.actor }} para branch ${{ github.event.pull_request.base.ref }}
 
-on:
+on:    
   pull_request:
     types: [opened, edited, synchronize]
     branches:
@@ -9,9 +9,14 @@ on:
         - Staging
         - UAT
         - SIT
+env:
+  USERNAME: ${{ secrets.PROD_USERNAME }}
+  CLIENTID: ${{ secrets.PROD_KEY }}
+  ORG_URL:  ${{ secrets.PROD_URL }}
+  STATUS: ":x:"
 
 jobs:
-  quality-Apex:
+ quality-Apex:
     name: Qualidade APEX
     runs-on: ubuntu-latest
     outputs:
@@ -30,7 +35,7 @@ jobs:
         with:
           node-version: '16'
 
-      - name: Instalar o gerenciador de pacotes NPM
+      - name: instalar as dependencias dos pacotes
         run: |
           npm install
 
@@ -46,9 +51,9 @@ jobs:
         id: apex_status
         run: |
           sfdx scanner:run -f junit -s 3 --normalize-severity -t "force-app" -e "pmd" -c "Design,Best Practices,Code Style,Performance,Security" --outfile ./reports/scan-apex.xml
-        continue-on-error: true
 
       - uses: actions/upload-artifact@v3
+        if: success() || failure()
         with:
           name: cli-scan-report
           path: reports/scan-apex.xml
@@ -58,13 +63,15 @@ jobs:
         if: success() || failure()
         with:
           report_paths: 'reports/scan-apex.xml' 
+          check_name: "Qualidade de código Apex"
           
       - name: Detalhes dos testes
         uses: test-summary/action@v2
+        if: success() || failure()
         with:
            paths: reports/scan-apex.xml
   
-  quality-LWC:  
+ quality-LWC:  
     name: Qualidade LWC
     runs-on: ubuntu-latest  
     outputs:
@@ -82,7 +89,7 @@ jobs:
         with:
           node-version: '16'
 
-      - name: Instalar o gerenciador de pacotes NPM
+      - name: Instalar as dependencias dos pacotes
         run: |
           npm install
 
@@ -97,10 +104,10 @@ jobs:
       - name: Validacao
         id: lwc_status
         run: |
-            sfdx scanner:run -f junit -s 3 --normalize-severity -t "force-app" -e "eslint" --outfile ./reports/scan-lwc.xml
-        continue-on-error: true
+          sfdx scanner:run -f junit -t "force-app/main/default/lwc" -e "eslint-lwc" -c "problem" --outfile ./reports/scan-lwc.xml
 
       - uses: actions/upload-artifact@v3
+        if: success() || failure()
         with:
           name: cli-scan-report
           path: reports/scan-lwc.xml
@@ -110,33 +117,94 @@ jobs:
         if: success() || failure()
         with:
           report_paths: 'reports/scan-lwc.xml' 
+          check_name: "Qualidade de código LWC"
             
       - name: Detalhes dos testes
+        if: success() || failure()
         uses: test-summary/action@v2
         with:
-          paths: reports/scan-lwc.xml   
+          paths: reports/scan-lwc.xml
 
-  comunicacoes:
-    name: Notificações e alertas
+ testes-apex-plataforma:
+    name: Checkonly com testes do apex
     runs-on: ubuntu-latest
     needs: [quality-Apex, quality-LWC]
     steps:
 
+     - uses: actions/checkout@v3
+       with:
+        fetch-depth: 0
+
+     - uses: actions/setup-node@v3
+       with:
+         node-version: '16'
+     
+     - name: 'Instalação SFDX'
+       run: | 
+         npm install @salesforce/cli --global
+      
+     - name: 'Popula as informações  para conectar no ambiente destino'
+       shell: bash
+       run: |
+         if echo [[ ${{ github.event.pull_request.base.ref == 'SIT'}} ]]
+         then 
+           echo "ORG_URL=${{ secrets.SDBX_URL}}" >> $GITHUB_ENV
+           echo "CLIENTID=${{ secrets.SIT_KEY}}" >> $GITHUB_ENV
+           echo "USERNAME=${{ secrets.SIT_USERNAME}}" >> $GITHUB_ENV
+         elif [[ ${{ github.event.pull_request.base.ref == 'UAT'}} ]]
+         then
+          echo "ORG_URL=${{ secrets.SDBX_URL}}" >> $GITHUB_ENV
+          echo "CLIENTID=${{ secrets.UAT_KEY}}" >> $GITHUB_ENV
+          echo "USERNAME=${{ secrets.UAT_USERNAME}}" >> $GITHUB_ENV
+         elif [[ ${{ github.event.pull_request.base.ref == 'Staging'}} ]]
+         then
+          echo "ORG_URL=${{ secrets.SDBX_URL}}" >> $GITHUB_ENV
+          echo "CLIENTID=${{ secrets.STAGING_KEY}}" >> $GITHUB_ENV
+          echo "USERNAME=${{ secrets.STAGING_USERNAME}}" >> $GITHUB_ENV
+         else
+          echo "ORG_URL=${{ secrets.PROD_URL}}" >> $GITHUB_ENV
+          echo "CLIENTID=${{ secrets.PROD_KEY}}" >> $GITHUB_ENV
+          echo "USERNAME=${{ secrets.PROD_USERNAME}}" >> $GITHUB_ENV
+         fi
+
+     - name: 'Salesforce Autentication'
+       run: 
+        sf org login jwt --username $USERNAME --jwt-key-file jwt/server.key --client-id $CLIENTID --alias SFDX  --instance-url $ORG_URL
+
+     - name: 'Concatenar classes de teste'
+       shell: bash
+       run:
+          echo "CLASSESTEST= find force-app/main/default/classes -name *Test.cls" >> $GITHUB_ENV
+
+     - name: 'show files'
+       run: 
+         echo '$CLASSESTEST'
+               
+     - name: 'Deploy the entire branch to Integration org'
+       run: sf project deploy start -d force-app -o SFDX -l RunLocalTests --dry-run --ignore-conflicts 
+
+ comunicacoes:
+    name: Notificações e alertas
+    runs-on: ubuntu-latest
+    needs: [testes-apex-plataforma]
+    if: always()
+    steps:
 
     - name: getPrUrl
       id: pr-url
       uses: ammaratef45/pr-url-action@v1
+
     - name: display
       run: echo ${{ steps.pr-url.outputs.url }} 
       
     - uses: ravsamhq/notify-slack-action@v2
-      if: ${{ needs.quality-Apex.outputs.output1 == 'failure' && needs.quality-LWC.outputs.output1 == 'failure'}}
+      if: ${{ needs.quality-Apex.outputs.output1 == 'failure'  || needs.quality-LWC.outputs.output1 == 'failure'}}
       with:
           status: ${{ job.status }}
           token: ${{ github.token }}
-          notification_title: 'Vulnerabilidades encontradas no ${{ github.head_ref }}'
-          message_format: ':large_orange_diamond: ${{ steps.pr-url.outputs.url }},  Necessária ação do time de segurança, acesse para rejeitar/aprovar a PR'
-          footer: 'link do repositório <{repo_url}|{repo}> | {workflow_url}'
+          notification_title: 'Vulnerabilidades encontradas na PR ${{ github.event.number }} enviada para a branch ${{ github.event.pull_request.base.ref }}'
+          message_format: ':large_orange_diamond: ${{ steps.pr-url.outputs.url }},  Necessária ação do time de segurança, acesse a PR'
+          footer: 'link do repositório <{repo_url}|{repo}>'
       env:
           SLACK_WEBHOOK_URL: ${{ secrets.ACTION_SLACK }}
   
@@ -145,8 +213,8 @@ jobs:
       with:
           status: ${{ job.status }}
           token: ${{ github.token }}
-          notification_title: '{branch} foi executado com :x:'
-          message_format: '{emoji} {workflow} {status_message} enviado por ${{ github.event.head_commit.author.name }} <{commit_url}|{commit_sha}> com os seguintes resultados de teste apex :x: e lwc :x:'
-          footer: link do repositório <{repo_url}|{repo}> | ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          notification_title: 'A PR ${{ github.event.number }} para a branch ${{ github.event.pull_request.base.ref }} foi executada com {emoji}'
+          message_format: '{emoji} {workflow} {status_message} enviado por ${{ github.event.head_commit.author.name }} com os seguintes resultados de teste apex {emoji} e lwc {emoji} '
+          footer: link para a PR <${{ steps.pr-url.outputs.url }}>"
       env:
           SLACK_WEBHOOK_URL: ${{ secrets.RELEASE_TEAM_SLACK }}
