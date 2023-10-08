@@ -9,11 +9,6 @@ on:
         - Staging
         - UAT
         - SIT
-env:
-  USERNAME: ${{ secrets.PROD_USERNAME }}
-  CLIENTID: ${{ secrets.PROD_KEY }}
-  ORG_URL:  ${{ secrets.PROD_URL }}
-
 jobs:
  
  quality-Apex:
@@ -142,23 +137,22 @@ jobs:
      - name: 'Instalação SFDX'
        run: | 
          npm install @salesforce/cli --global
-    
-     - name: 'Logout dos ambientes'
-       run: 
-        sf org logout -o SFDX
-
-     - name: 'Salesforce Autentication'
-       run: 
-        sf org login jwt --username $USERNAME --jwt-key-file jwt/server.key --client-id $CLIENTID --alias SFDX  --instance-url $ORG_URL
-
-     - name: 'Concatenar classes de teste'
+      
+     - name: 'Autenticação Salesforce'
        shell: bash
-       run:
-          echo "CLASSESTEST=find force-app/main/default/classes -name *Test.cls" >> $GITHUB_ENV
-
-     - name: 'show files'
-       run: 
-         echo "$CLASSESTEST"
+       run: |
+         if echo [[ ${{ github.event.pull_request.base.ref == 'SIT'}} ]]
+         then 
+           sf org login jwt --username ${{ secrets.SIT_USERNAME}} --jwt-key-file jwt/server.key --client-id ${{ secrets.SIT_KEY}} --alias SFDX  --instance-url ${{ secrets.SDBX_URL}}
+         elif [[ ${{ github.event.pull_request.base.ref == 'UAT'}} ]]
+         then
+           sf org login jwt --username ${{ secrets.UAT_USERNAME}} --jwt-key-file jwt/server.key --client-id ${{ secrets.UAT_KEY}} --alias SFDX  --instance-url ${{ secrets.SDBX_URL}}
+         elif [[ ${{ github.event.pull_request.base.ref == 'Staging'}} ]]
+         then
+           sf org login jwt --username ${{ secrets.STAGING_USERNAME}} --jwt-key-file jwt/server.key --client-id ${{ secrets.STAGING_KEY}} --alias SFDX  --instance-url ${{ secrets.SDBX_URL}}
+         else
+           sf org login jwt --username ${{ secrets.PROD_USERNAME}} --jwt-key-file jwt/server.key --client-id ${{ secrets.PROD_KEY}} --alias SFDX  --instance-url ${{ secrets.PROD_URL}}
+         fi
                
      - name: 'Deploy the entire branch to Integration org'
        run: sf project deploy start -d force-app -o SFDX -l RunLocalTests --dry-run --ignore-conflicts 
@@ -194,7 +188,7 @@ jobs:
           status: ${{ job.status }}
           token: ${{ github.token }}
           notification_title: 'A PR ${{ github.event.number }} para a branch ${{ github.event.pull_request.base.ref }} foi executada com {emoji}'
-          message_format: '{emoji} {workflow} {status_message} enviado por ${{ github.event.head_commit.author.name }} com os seguintes resultados de teste apex {emoji} e lwc {emoji} '
+          message_format: '{emoji} {workflow} {status_message} enviado por ${{ github.actor }} com os seguintes resultados de teste apex {emoji} e lwc {emoji} '
           footer: link para a PR <${{ steps.pr-url.outputs.url }}>"
       env:
           SLACK_WEBHOOK_URL: ${{ secrets.RELEASE_TEAM_SLACK }}
