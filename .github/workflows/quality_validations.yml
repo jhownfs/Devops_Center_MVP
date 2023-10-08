@@ -166,9 +166,8 @@ jobs:
 
      - name: 'Salesforce Autentication'
        run: 
-        echo ls
-        sf org login jwt --username $USERNAME --jwt-key-file ./jwt/server.key --client-id $CLIENTID --alias SFDX  --instance-url $ORG_URL
-
+          ls
+        
      - name: 'Deploy the entire branch to Integration org'
        run: sf project deploy start -d force-app -o SFDX -l RunLocalTests --dry-run
 
