@@ -1,26 +1,26 @@
-import { LightningElement, api } from 'lwc';
-
-const QUERY_URL = 'https://www.googleapi.com/books/v1/volumes?langRestrict=en&q';
+/* eslint linebreak-style: ["error", "unix"] */
+import {LightningElement, track, api} from "lwc";
+import getCupons from "@salesforce/apex/AttachCampaings.getCupons";
 
 export default class Campainlist extends LightningElement {
 
-  searchKey = 'Books';  
-  @api chave_estrangeira;
+    @track 
+    lstCupons = [];
+    @api 
+    validado = false;
 
-  getEvent(){
-    fetch(QUERY_URL + this.searchKey).then((response) =>{
+    // Utlizando promise para chamar o metodo imperativo
+    @api
+    handleLoad() {
+        getCupons().then((result) => {
 
-        if(!response.ok){
-          throw response.json();
-        } else {
-            return response.json();
-        }
-        
-    })
-  }
+            this.lstCupons = result;
+            const inputs = this.template.querySelectorAll('.form-control');
 
-  addContent(){
-    const elem = this.template.querySelector("div");
-    elem.innerHTML = "<script>malicious</script>";
-  }
+            inputs.textContent = 'mensagem';
+        })
+        .catch((error) => {
+            console.log("error => ", error);
+        });
+    }
 }
