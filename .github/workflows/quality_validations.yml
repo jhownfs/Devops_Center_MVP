@@ -215,6 +215,6 @@ jobs:
           token: ${{ github.token }}
           notification_title: 'A PR ${{ github.event.number }} para a branch ${{ github.event.pull_request.base.ref }} foi executada com {emoji}'
           message_format: '{emoji} {workflow} {status_message} enviado por ${{ github.event.head_commit.author.name }} com os seguintes resultados de teste apex {emoji} e lwc {emoji} '
-          footer: link do repositório <{repo_url}|{repo}>"
+          footer: link para a PR <${{ steps.pr-url.outputs.url }}>"
       env:
           SLACK_WEBHOOK_URL: ${{ secrets.RELEASE_TEAM_SLACK }}
