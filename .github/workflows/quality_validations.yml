@@ -138,16 +138,16 @@ jobs:
      - name: 'Popula as informações  para conectar no ambiente destino'
        shell: bash
        run: |
-         if echo ${{ github.event.pull_request.base.ref == 'SIT'}}
+         if echo [[ ${{ github.event.pull_request.base.ref == 'SIT'}} ]]
          then 
            echo "ORG_URL=${{ secrets.SDBX_URL}}" >> $GITHUB_ENV
            echo "CLIENTID=${{ secrets.SIT_KEY}}" >> $GITHUB_ENV
            echo "USERNAME=${{ secrets.SIT_USERNAME}}" >> $GITHUB_ENV
-         else if ${{ github.event.pull_request.base.ref == 'UAT'}}
+         else if [[ ${{ github.event.pull_request.base.ref == 'UAT'}} ]]
           echo "ORG_URL=${{ secrets.SDBX_URL}}" >> $GITHUB_ENV
           echo "CLIENTID=${{ secrets.UAT_KEY}}" >> $GITHUB_ENV
           echo "USERNAME=${{ secrets.UAT_USERNAME}}" >> $GITHUB_ENV
-         else if ${{ github.event.pull_request.base.ref == 'Staging'}}
+         else if [[ ${{ github.event.pull_request.base.ref == 'Staging'}} ]]
           echo "ORG_URL=${{ secrets.SDBX_URL}}" >> $GITHUB_ENV
           echo "CLIENTID=${{ secrets.STAGING_KEY}}" >> $GITHUB_ENV
           echo "USERNAME=${{ secrets.STAGING_USERNAME}}" >> $GITHUB_ENV
