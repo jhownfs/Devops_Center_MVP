@@ -142,29 +142,7 @@ jobs:
      - name: 'Instalação SFDX'
        run: | 
          npm install @salesforce/cli --global
-      
-     - name: 'Popula as informações  para conectar no ambiente destino'
-       shell: bash
-       run: |
-         if echo [[ ${{ github.event.pull_request.base.ref == 'SIT'}} ]]
-         then 
-           echo "ORG_URL=${{ secrets.SDBX_URL}}" >> $GITHUB_ENV
-           echo "CLIENTID=${{ secrets.SIT_KEY}}" >> $GITHUB_ENV
-           echo "USERNAME=${{ secrets.SIT_USERNAME}}" >> $GITHUB_ENV
-         elif [[ ${{ github.event.pull_request.base.ref == 'UAT'}} ]]
-         then
-          echo "ORG_URL=${{ secrets.SDBX_URL}}" >> $GITHUB_ENV
-          echo "CLIENTID=${{ secrets.UAT_KEY}}" >> $GITHUB_ENV
-          echo "USERNAME=${{ secrets.UAT_USERNAME}}" >> $GITHUB_ENV
-         elif [[ ${{ github.event.pull_request.base.ref == 'Staging'}} ]]
-         then
-          echo "ORG_URL=${{ secrets.SDBX_URL}}" >> $GITHUB_ENV
-          echo "CLIENTID=${{ secrets.STAGING_KEY}}" >> $GITHUB_ENV
-          echo "USERNAME=${{ secrets.STAGING_USERNAME}}" >> $GITHUB_ENV
-         fi
-        
-         echo "$ORG_URL e $CLIENTID e $USERNAME | sed 's/./& /g'"
-
+    
      - name: 'Logout dos ambientes'
        run: 
         sf org logout -o SFDX
