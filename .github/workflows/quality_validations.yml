@@ -172,15 +172,14 @@ jobs:
        run: 
         sf org login jwt --username $USERNAME --jwt-key-file jwt/server.key --client-id $CLIENTID --alias SFDX  --instance-url $ORG_URL
 
-     - name: Find files matching "*.rs" or "*.md"
-       uses: jeertmans/filesfinder@latest
-       id: classesTest
-       with:
-          args: "*Test.cls"
+     - name: 'Concatenar classes de teste'
+       shell: bash
+       run:
+          echo "CLASSESTEST= find force-app/main/default/classes -name *Test.cls" >> $GITHUB_ENV
 
-     - name: 'Salesforce Autentication'
+     - name: 'show files'
        run: 
-         echo "${{ steps.classesTest.outputs.files }}"
+         echo '$CLASSESTEST'
                
      - name: 'Deploy the entire branch to Integration org'
        run: sf project deploy start -d force-app -o SFDX -l RunLocalTests --dry-run --ignore-conflicts 

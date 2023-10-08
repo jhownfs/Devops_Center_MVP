@@ -1,4 +1,4 @@
-/* eslint linebreak-style: ["error", "windows"] */
+/* eslint linebreak-style: ["error", "unix"] */
 import {LightningElement, track, api} from "lwc";
 import getCupons from "@salesforce/apex/AttachCampaings.getCupons";
 
