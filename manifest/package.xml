@@ -5,5 +5,10 @@
 		<members>Cupom__c</members>
 		<name>CustomObject</name>
 	</types>
+    <types>
+		<members>Admin</members>
+		<members>Standard</members>
+		<name>Profile</name>
+	</types>
 	<version>55.0</version>
 </Package>
