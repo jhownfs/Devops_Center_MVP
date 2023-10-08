@@ -165,7 +165,7 @@ jobs:
          fi
 
      - name: 'Salesforce Autentication'
-       run: | 
+       run: 
         echo ls
         sf org login jwt --username $USERNAME --jwt-key-file ./jwt/server.key --client-id $CLIENTID --alias SFDX  --instance-url $ORG_URL
 
