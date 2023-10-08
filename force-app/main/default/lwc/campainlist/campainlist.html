@@ -1,7 +1,18 @@
+<!-- apexImperativeMethod.html -->
 <template>
-    <lightning-card>
-     <div class="slds-p-around_small">
-        <p>Message displayed using Lightning Messaging Utility:</p>
-     </div>
+    <lightning-card title="Lista de Cupons e campanhas" icon-name="custom:custom63">
+      <div class="slds-m-around_medium">
+        <p class="slds-m-bottom_small">
+          <lightning-button label="Load Contacts" onclick={handleLoad}></lightning-button>
+        </p>
+        <template lwc:if={lstCupons}>
+          <template for:each={lstCupons} for:item="cupons">
+            <p key={cupuns.Id}>{cupons.Desconto__c}</p>
+          </template>
+        </template>
+        <template lwc:elseif={error}>
+            {error}
+        </template>
+      </div>
     </lightning-card>
-</template>
+  </template>
