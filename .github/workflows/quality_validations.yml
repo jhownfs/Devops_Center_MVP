@@ -140,7 +140,7 @@ jobs:
       
      - name: 'Autenticação Salesforce'
        shell: bash
-       run:
+       run: |
          if echo [[ ${{ github.event.pull_request.base.ref == 'SIT'}} ]]
          then 
            sf org login jwt --username ${{ secrets.SIT_USERNAME}} --jwt-key-file jwt/server.key --client-id ${{ secrets.SIT_KEY}} --alias SFDX  --instance-url ${{ secrets.SDBX_URL}}
