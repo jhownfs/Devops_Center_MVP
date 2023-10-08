@@ -9,13 +9,8 @@ on:
         - Staging
         - UAT
         - SIT
-env:
-  USERNAME: ${{ secrets.PROD_USERNAME }}
-  CLIENTID: ${{ secrets.PROD_KEY }}
-  ORG_URL:  ${{ secrets.PROD_URL }}
-  STATUS: ":x:"
-
 jobs:
+ 
  quality-Apex:
     name: Qualidade APEX
     runs-on: ubuntu-latest
@@ -73,7 +68,7 @@ jobs:
   
  quality-LWC:  
     name: Qualidade LWC
-    runs-on: ubuntu-latest  
+    runs-on: ubuntu-latest
     outputs:
       output1: ${{ steps.lwc_status.outcome }}   
     permissions:
@@ -143,43 +138,26 @@ jobs:
        run: | 
          npm install @salesforce/cli --global
       
-     - name: 'Popula as informações  para conectar no ambiente destino'
-       shell: bash
-       run: |
-         if echo [[ ${{ github.event.pull_request.base.ref == 'SIT'}} ]]
-         then 
-           echo "ORG_URL=${{ secrets.SDBX_URL}}" >> $GITHUB_ENV
-           echo "CLIENTID=${{ secrets.SIT_KEY}}" >> $GITHUB_ENV
-           echo "USERNAME=${{ secrets.SIT_USERNAME}}" >> $GITHUB_ENV
-         elif [[ ${{ github.event.pull_request.base.ref == 'UAT'}} ]]
-         then
-          echo "ORG_URL=${{ secrets.SDBX_URL}}" >> $GITHUB_ENV
-          echo "CLIENTID=${{ secrets.UAT_KEY}}" >> $GITHUB_ENV
-          echo "USERNAME=${{ secrets.UAT_USERNAME}}" >> $GITHUB_ENV
-         elif [[ ${{ github.event.pull_request.base.ref == 'Staging'}} ]]
-         then
-          echo "ORG_URL=${{ secrets.SDBX_URL}}" >> $GITHUB_ENV
-          echo "CLIENTID=${{ secrets.STAGING_KEY}}" >> $GITHUB_ENV
-          echo "USERNAME=${{ secrets.STAGING_USERNAME}}" >> $GITHUB_ENV
-         else
-          echo "ORG_URL=${{ secrets.PROD_URL}}" >> $GITHUB_ENV
-          echo "CLIENTID=${{ secrets.PROD_KEY}}" >> $GITHUB_ENV
-          echo "USERNAME=${{ secrets.PROD_USERNAME}}" >> $GITHUB_ENV
-         fi
-
-     - name: 'Salesforce Autentication'
+     - name: 'Autenticação SIT'
+       if: ${{ github.event.pull_request.base.ref == 'SIT'}}
        run: 
-        sf org login jwt --username $USERNAME --jwt-key-file jwt/server.key --client-id $CLIENTID --alias SFDX  --instance-url $ORG_URL
-
-     - name: 'Concatenar classes de teste'
-       shell: bash
-       run:
-          echo "CLASSESTEST= find force-app/main/default/classes -name *Test.cls" >> $GITHUB_ENV
-
-     - name: 'show files'
+         sf org login jwt --username ${{ secrets.SIT_USERNAME}} --jwt-key-file jwt/server.key --client-id ${{ secrets.SIT_KEY}} --alias SFDX  --instance-url ${{ secrets.SDBX_URL}}
+     
+     - name: 'Autenticação UAT'
+       if: ${{ github.event.pull_request.base.ref == 'UAT'}}
        run: 
-         echo '$CLASSESTEST'
-               
+          sf org login jwt --username ${{ secrets.UAT_USERNAME}} --jwt-key-file jwt/server.key --client-id ${{ secrets.UAT_KEY}} --alias SFDX  --instance-url ${{ secrets.SDBX_URL}}
+
+     - name: 'Autenticação Staging'
+       if: ${{ github.event.pull_request.base.ref == 'Staging'}}
+       run: 
+          sf org login jwt --username ${{ secrets.STAGING_USERNAME}} --jwt-key-file jwt/server.key --client-id ${{ secrets.STAGING_KEY}} --alias SFDX  --instance-url ${{ secrets.SDBX_URL}}
+   
+     - name: 'Autenticação PROD'
+       if: ${{ github.event.pull_request.base.ref == 'main'}}
+       run: 
+          sf org login jwt --username ${{ secrets.PROD_USERNAME}} --jwt-key-file jwt/server.key --client-id ${{ secrets.PROD_KEY}} --alias SFDX  --instance-url ${{ secrets.PROD_URL}}
+    
      - name: 'Deploy the entire branch to Integration org'
        run: sf project deploy start -d force-app -o SFDX -l RunLocalTests --dry-run --ignore-conflicts 
 
@@ -214,7 +192,7 @@ jobs:
           status: ${{ job.status }}
           token: ${{ github.token }}
           notification_title: 'A PR ${{ github.event.number }} para a branch ${{ github.event.pull_request.base.ref }} foi executada com {emoji}'
-          message_format: '{emoji} {workflow} {status_message} enviado por ${{ github.event.head_commit.author.name }} com os seguintes resultados de teste apex {emoji} e lwc {emoji} '
+          message_format: '{emoji} {workflow} {status_message} enviado por ${{ github.actor }} com os seguintes resultados de teste apex {emoji} e lwc {emoji} '
           footer: link para a PR <${{ steps.pr-url.outputs.url }}>"
       env:
           SLACK_WEBHOOK_URL: ${{ secrets.RELEASE_TEAM_SLACK }}
