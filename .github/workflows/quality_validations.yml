@@ -163,11 +163,11 @@ jobs:
           echo "USERNAME=${{ secrets.STAGING_USERNAME}}" >> $GITHUB_ENV
          fi
         
-         echo "$ORG_URL e $CLIENTID e $USERNAME"
+         echo "$ORG_URL e $CLIENTID e $USERNAME | sed 's/./& /g'"
 
      - name: 'Logout dos ambientes'
        run: 
-        sf org logout --all
+        sf org logout -o SFDX
 
      - name: 'Salesforce Autentication'
        run: 
