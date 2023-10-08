@@ -13,7 +13,6 @@ env:
   USERNAME: ${{ secrets.PROD_USERNAME }}
   CLIENTID: ${{ secrets.PROD_KEY }}
   ORG_URL:  ${{ secrets.PROD_URL }}
-  STATUS: ":x:"
 
 jobs:
  quality-Apex:
@@ -161,11 +160,13 @@ jobs:
           echo "ORG_URL=${{ secrets.SDBX_URL}}" >> $GITHUB_ENV
           echo "CLIENTID=${{ secrets.STAGING_KEY}}" >> $GITHUB_ENV
           echo "USERNAME=${{ secrets.STAGING_USERNAME}}" >> $GITHUB_ENV
-         else
-          echo "ORG_URL=${{ secrets.PROD_URL}}" >> $GITHUB_ENV
-          echo "CLIENTID=${{ secrets.PROD_KEY}}" >> $GITHUB_ENV
-          echo "USERNAME=${{ secrets.PROD_USERNAME}}" >> $GITHUB_ENV
          fi
+        
+         echo "$ORG_URL e $CLIENTID e $USERNAME"
+
+     - name: 'Logout dos ambientes'
+       run: 
+        sf org logout --all
 
      - name: 'Salesforce Autentication'
        run: 
@@ -174,11 +175,11 @@ jobs:
      - name: 'Concatenar classes de teste'
        shell: bash
        run:
-          echo "CLASSESTEST= find force-app/main/default/classes -name *Test.cls" >> $GITHUB_ENV
+          echo "CLASSESTEST=find force-app/main/default/classes -name *Test.cls" >> $GITHUB_ENV
 
      - name: 'show files'
        run: 
-         echo '$CLASSESTEST'
+         echo "$CLASSESTEST"
                
      - name: 'Deploy the entire branch to Integration org'
        run: sf project deploy start -d force-app -o SFDX -l RunLocalTests --dry-run --ignore-conflicts 
