@@ -99,7 +99,7 @@ jobs:
       - name: Validacao
         id: lwc_status
         run: |
-          sfdx scanner:run -f junit -t "force-app/main/default/lwc" -e "eslint-lwc" -c "problem" --outfile ./reports/scan-lwc.xml
+          sfdx scanner:run -f junit -s 3 -t "force-app/main/default/lwc" -e "eslint-lwc" -c "problem" --outfile ./reports/scan-lwc.xml
 
       - uses: actions/upload-artifact@v3
         if: success() || failure()
@@ -167,7 +167,7 @@ jobs:
  comunicacoes:
     name: Notificações e alertas
     runs-on: ubuntu-latest
-    needs: [testes-apex-plataforma]
+    needs: [testes-apex-plataforma, quality-LWC, quality-Apex]
     if: always()
     steps:
 
