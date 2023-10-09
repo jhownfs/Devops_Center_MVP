@@ -124,6 +124,8 @@ jobs:
     name: Checkonly com testes do apex
     runs-on: ubuntu-latest
     needs: [quality-Apex, quality-LWC]
+    outputs:
+      output1: ${{ steps.apex_test_classes.outcome }}
     steps:
 
      - uses: actions/checkout@v3
@@ -159,6 +161,7 @@ jobs:
           sf org login jwt --username ${{ secrets.PROD_USERNAME}} --jwt-key-file jwt/server.key --client-id ${{ secrets.PROD_KEY}} --alias SFDX  --instance-url ${{ secrets.PROD_URL}}
     
      - name: 'Deploy the entire branch to Integration org'
+       id: apex_test_classes
        run: sf project deploy start -d force-app -o SFDX -l RunLocalTests --dry-run --ignore-conflicts 
 
  comunicacoes:
@@ -192,7 +195,7 @@ jobs:
           status: ${{ job.status }}
           token: ${{ github.token }}
           notification_title: 'A PR ${{ github.event.number }} para a branch ${{ github.event.pull_request.base.ref }} foi executada com {emoji}'
-          message_format: '{emoji} {workflow} {status_message} enviado por ${{ github.actor }} com os seguintes resultados de teste apex {emoji} e lwc {emoji} '
+          message_format: '{emoji} *{workflow}* {status_message} enviado por ${{ github.actor }} com os seguintes resultados de teste apex {emoji} e lwc {emoji} '
           footer: link para a PR <${{ steps.pr-url.outputs.url }}>"
       env:
           SLACK_WEBHOOK_URL: ${{ secrets.RELEASE_TEAM_SLACK }}
