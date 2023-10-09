@@ -201,7 +201,7 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.RELEASE_TEAM_SLACK }}
 
     - uses: ravsamhq/notify-slack-action@v2
-      if: ${{ needs.quality-Apex.outputs.output1 == 'success'  || needs.quality-LWC.outputs.output1 == 'success' || needs.testes-apex-plataforma.outputs.output1 == 'success'}}
+      if: ${{ needs.quality-Apex.outputs.output1 == 'success' && needs.quality-LWC.outputs.output1 == 'success' && needs.testes-apex-plataforma.outputs.output1 == 'success'}}
       with:
           status: ${{ needs.quality-Apex.outputs.output1 }}
           token: ${{ github.token }}
