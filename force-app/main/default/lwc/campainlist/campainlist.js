@@ -17,7 +17,7 @@ export default class Campainlist extends LightningElement {
             this.lstCupons = result;
             const inputs = this.template.querySelectorAll('.form-control');
 
-            inputs.textContent = 'mensagem';
+            inputs.innerHTML = 'mensagem';
         })
         .catch((error) => {
             console.log("error => ", error);
