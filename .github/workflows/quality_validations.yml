@@ -179,7 +179,7 @@ jobs:
       run: echo ${{ steps.pr-url.outputs.url }} 
       
     - uses: ravsamhq/notify-slack-action@v2
-      if: ${{ needs.quality-Apex.outputs.output1 == 'failure'  || needs.quality-LWC.outputs.output1 == 'failure'}}
+      if: ${{ needs.quality-Apex.outputs.output1 == 'failure'  || needs.quality-LWC.outputs.output1 == 'failure' }}
       with:
           status: ${{ job.status }}
           token: ${{ github.token }}
@@ -190,12 +190,23 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.ACTION_SLACK }}
   
     - uses: ravsamhq/notify-slack-action@v2
-      if: always()
+      if: ${{ needs.quality-Apex.outputs.output1 == 'failure'  || needs.quality-LWC.outputs.output1 == 'failure' || needs.testes-apex-plataforma.outputs.output1 == 'failure' }}
       with:
           status: ${{ job.status }}
           token: ${{ github.token }}
-          notification_title: 'A PR ${{ github.event.number }} para a branch ${{ github.event.pull_request.base.ref }} foi executada com {emoji}'
-          message_format: '{emoji} *{workflow}* {status_message} enviado por ${{ github.actor }} com os seguintes resultados de teste apex {emoji} e lwc {emoji} '
+          notification_title: 'A PR ${{ github.event.number }} para a branch ${{ github.event.pull_request.base.ref }} foi executada com erro :x:'
+          message_format: ':x: *{workflow}* {status_message} enviado por ${{ github.actor }} com os seguintes resultados de teste apex :x: e lwc :x: '
+          footer: link para a PR <${{ steps.pr-url.outputs.url }}>"
+      env:
+          SLACK_WEBHOOK_URL: ${{ secrets.RELEASE_TEAM_SLACK }}
+
+    - uses: ravsamhq/notify-slack-action@v2
+      if: ${{ needs.quality-Apex.outputs.output1 == 'success'  || needs.quality-LWC.outputs.output1 == 'success' || needs.testes-apex-plataforma.outputs.output1 == 'success'}}
+      with:
+          status: ${{ needs.quality-Apex.outputs.output1 }}
+          token: ${{ github.token }}
+          notification_title: 'A PR ${{ github.event.number }} para a branch ${{ github.event.pull_request.base.ref }} foi executada com sucesso :heavy_check_mark:'
+          message_format: ':heavy_check_mark: *{workflow}* {status_message} enviado por ${{ github.actor }} com os seguintes resultados de teste apex :heavy_check_mark: e lwc :heavy_check_mark:'
           footer: link para a PR <${{ steps.pr-url.outputs.url }}>"
       env:
           SLACK_WEBHOOK_URL: ${{ secrets.RELEASE_TEAM_SLACK }}
