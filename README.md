@@ -1,18 +1,11 @@
-# Salesforce DX Project: Next Steps
+# Salesforce DevOps Center Scripts
 
-Now that you’ve created a Salesforce DX project, what’s next? Here are some documentation resources to get you started.
+This project provide scripts to run after DevOps Center Salesforce do a push to repository, to keep code quality, governance, validation and security.
 
-## How Do You Plan to Deploy Your Changes?
+Note: The same script can be used in another CI/CD tool, it's tecnhology agnostic.
 
-Do you want to deploy a set of changes, or create a self-contained application? Choose a [development model](https://developer.salesforce.com/tools/vscode/en/user-guide/development-models).
+## How works?
 
-## Configure Your Salesforce DX Project
+In this git-action script we have some steps to validate Salesforce metadata commited to repository, this script using SFDX CLI Scanner to validate code, best practices and more.
 
-The `sfdx-project.json` file contains useful configuration information for your project. See [Salesforce DX Project Configuration](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_ws_config.htm) in the _Salesforce DX Developer Guide_ for details about this file.
-
-## Read All About It
-
-- [Salesforce Extensions Documentation](https://developer.salesforce.com/tools/vscode/)
-- [Salesforce CLI Setup Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_intro.htm)
-- [Salesforce DX Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_intro.htm)
-- [Salesforce CLI Command Reference](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference.htm)
+More details will be add soon on.
