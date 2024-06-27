@@ -30,7 +30,6 @@ private class AttachCampaingsTest {
 
     @isTest
     static void inserirCampanhasComSucesso(){
-       
 
         list<Cupom__c> lstCupons = AttachCampaings.getCupons();
 
