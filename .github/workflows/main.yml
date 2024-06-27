@@ -3,7 +3,7 @@ run-name: PR ${{ github.event.head_commit.message }} enviado por ${{ github.acto
 
 on:    
   pull_request:
-    types: [opened, edited, synchronize]
+    types: [review_requested, opened, edited, synchronize]
     branches:
         - main
         - Staging
