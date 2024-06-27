@@ -1,7 +1,8 @@
 name: Validação de Qualidade
 run-name: PR ${{ github.event.head_commit.message }} enviado por ${{ github.actor }} para branch ${{ github.event.pull_request.base.ref }}
 
-on:    
+on:
+  workflow_dispatch:    
   pull_request:
     types: [review_requested, opened, edited, synchronize]
     branches:
