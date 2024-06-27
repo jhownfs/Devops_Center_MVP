@@ -6,11 +6,11 @@ on:
     types: [opened, edited, synchronize]
     branches:
         - main
-        - Staging
+        - staging
         - Release
         - hotfix
         - UAT
-        - SIT
+        - dev
 jobs:
  
  quality-Apex:
