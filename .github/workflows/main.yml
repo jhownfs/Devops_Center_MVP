@@ -6,12 +6,12 @@ on:
   pull_request:
     types: [review_requested, opened, edited, synchronize]
     branches:
-        - main
-        - Staging
-        - Release
-        - hotfix
-        - UAT
-        - SIT
+      - main
+      - staging
+      - Release
+      - hotfix
+      - UAT
+      - dev
 jobs:
  
  quality-Apex:
