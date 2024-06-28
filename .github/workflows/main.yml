@@ -117,10 +117,15 @@ jobs:
         fetch-depth: 0
       
      - name: 'Autenticação'
-       if: ${{ github.event.pull_request.base.ref == 'SIT'}}
+       if: ${{ github.event.pull_request.base.ref == 'dev'}}
        run: 
          sf org login jwt --username ${{ secrets.SIT_USERNAME}} --jwt-key-file jwt/server.key --client-id ${{ secrets.SIT_KEY}} --alias SFDX  --instance-url ${{ secrets.SDBX_URL}}
      
+     - name: 'Autenticação'
+       if: ${{ github.event.pull_request.base.ref == 'Release'}}
+       run: 
+          sf org login jwt --username ${{ secrets.Release_USERNAME}} --jwt-key-file jwt/server.key --client-id ${{ secrets.Release_KEY}} --alias SFDX  --instance-url ${{ secrets.SDBX_URL}} 
+
      - name: 'Autenticação'
        if: ${{ github.event.pull_request.base.ref == 'UAT'}}
        run: 
