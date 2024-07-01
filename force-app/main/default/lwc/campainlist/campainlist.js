@@ -1,5 +1,4 @@
-/* eslint linebreak-style: ["error", "windows"] */
-import {LightningElement, track, api} from "lwc";
+import {api, LightningElement, track} from "lwc";
 import getCupons from "@salesforce/apex/AttachCampaings.getCupons";
 
 export default class Campainlist extends LightningElement {
@@ -8,7 +7,6 @@ export default class Campainlist extends LightningElement {
     lstCupons = [];
     @api 
     validado = false;
-
     // Utlizando promise para chamar o metodo imperativo
     @api
     handleLoad() {

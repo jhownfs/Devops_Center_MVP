@@ -11,14 +11,15 @@ public with sharing class AttachCampaings {
 
     @AuraEnabled
     public static String insertCampaings(List<Campaign> lstCampaign){
-       
       String msg = 'Sucesso';
 
       if (Schema.sObjectType.Campaign.isCreateable()) {
-
-         insert lstCampaign;  
-
+         insert lstCampaign;
       }
+
+
+
+      
 
       return msg;
   }
