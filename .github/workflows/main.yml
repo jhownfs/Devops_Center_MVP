@@ -117,31 +117,29 @@ jobs:
         fetch-depth: 0
       
      - name: 'Autenticação'
-       env:
-          PRIVATE_KEY: ${{ secrets.JWT_SECRET }}
        if: ${{ github.event.pull_request.base.ref == 'dev'}}
-       run: |
-         sf org login jwt --username ${{ secrets.SIT_USERNAME}} --jwt-key-file "$PRIVATE_KEY" --client-id ${{ secrets.SIT_KEY}} --alias SFDX  --instance-url ${{ secrets.SDBX_URL}}
+       run: 
+         sf org login jwt --username ${{ secrets.SIT_USERNAME}} --jwt-key-file jwt/server.key --client-id ${{ secrets.SIT_KEY}} --alias SFDX  --instance-url ${{ secrets.SDBX_URL}}
      
      - name: 'Autenticação'
        if: ${{ github.event.pull_request.base.ref == 'Release'}}
-       run: |
-          sf org login jwt --username ${{ secrets.RELEASE_USER}} --jwt-key-file "$PRIVATE_KEY" --client-id ${{ secrets.RELEASE_KEY}} --alias SFDX  --instance-url ${{ secrets.SDBX_URL}} 
+       run: 
+          sf org login jwt --username ${{ secrets.RELEASE_USER}} --jwt-key-file jwt/server.key --client-id ${{ secrets.RELEASE_KEY}} --alias SFDX  --instance-url ${{ secrets.SDBX_URL}} 
 
      - name: 'Autenticação'
        if: ${{ github.event.pull_request.base.ref == 'UAT'}}
-       run: |
-          sf org login jwt --username ${{ secrets.UAT_USERNAME}} --jwt-key-file ${{ secrets.JWT_SECRET }} --client-id ${{ secrets.UAT_KEY}} --alias SFDX  --instance-url ${{ secrets.SDBX_URL}}
+       run: 
+          sf org login jwt --username ${{ secrets.UAT_USERNAME}} --jwt-key-file jwt/server.key --client-id ${{ secrets.UAT_KEY}} --alias SFDX  --instance-url ${{ secrets.SDBX_URL}}
 
      - name: 'Autenticação'
        if: ${{ github.event.pull_request.base.ref == 'Staging'}}
-       run: |
-          sf org login jwt --username ${{ secrets.STAGING_USERNAME}} --jwt-key-file ${{ secrets.JWT_SECRET }} --client-id ${{ secrets.STAGING_KEY}} --alias SFDX  --instance-url ${{ secrets.SDBX_URL}}
+       run: 
+          sf org login jwt --username ${{ secrets.STAGING_USERNAME}} --jwt-key-file jwt/server.key --client-id ${{ secrets.STAGING_KEY}} --alias SFDX  --instance-url ${{ secrets.SDBX_URL}}
    
      - name: 'Autenticação'
        if: ${{ github.event.pull_request.base.ref == 'main'}}
-       run: |
-          sf org login jwt --username ${{ secrets.PROD_USERNAME}} --jwt-key-file ${{ secrets.JWT_SECRET }} --client-id ${{ secrets.PROD_KEY}} --alias SFDX  --instance-url ${{ secrets.PROD_URL}}
+       run: 
+          sf org login jwt --username ${{ secrets.PROD_USERNAME}} --jwt-key-file jwt/server.key --client-id ${{ secrets.PROD_KEY}} --alias SFDX  --instance-url ${{ secrets.PROD_URL}}
     
      - name: 'Deploy the entire branch to Integration org'
        id: apex_test_classes
