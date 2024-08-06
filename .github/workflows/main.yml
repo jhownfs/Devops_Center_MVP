@@ -117,7 +117,7 @@ jobs:
         fetch-depth: 0
       
      - name: 'export_json_key'
-       run: 
+       run:
          echo "$JWT_SECRET"  > server.key
  
      - name: 'Autenticação'
