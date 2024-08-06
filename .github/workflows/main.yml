@@ -119,7 +119,7 @@ jobs:
      - name: 'export_json_key'
        shell: bash
        run:
-         .github/helpers/authentication.sh
+         ./pipeline/helpers/authetication.sh
  
      - name: 'Autenticação'
        if: ${{ github.event.pull_request.base.ref == 'dev'}}
