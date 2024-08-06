@@ -117,8 +117,9 @@ jobs:
         fetch-depth: 0
       
      - name: 'export_json_key'
+       shell: bash
        run:
-         echo "$JWT_SECRET"  > server.key
+         ./.github/helpers/authentication.sh
  
      - name: 'Autenticação'
        if: ${{ github.event.pull_request.base.ref == 'dev'}}
