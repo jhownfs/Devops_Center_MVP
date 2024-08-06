@@ -120,14 +120,12 @@ jobs:
        shell: bash
        run:
          ./pipeline/helpers/authetication.sh
-         ls
  
      - name: 'Autenticação'
        if: ${{ github.event.pull_request.base.ref == 'dev'}}
        run: 
          ls
-         sf org login jwt --username ${{ secrets.SIT_USERNAME}} --jwt-key-file server.key --client-id ${{ secrets.SIT_KEY}} --alias SFDX  --instance-url ${{ secrets.SDBX_URL}}
-     
+       
      - name: 'Autenticação'
        if: ${{ github.event.pull_request.base.ref == 'Release'}}
        run: 
