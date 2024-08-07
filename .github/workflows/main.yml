@@ -120,15 +120,16 @@ jobs:
        shell: bash
        env:
         USERNAME: ${{ secrets.SIT_USERNAME }}
-        KEY: ${{ secrets.SIT_KEY}}
-        URL: ${{ secrets.SDBX_URL}}
+        KEY: ${{ secrets.SIT_KEY }}
+        URL: ${{ secrets.SDBX_URL }}
+        SECRET: ${{ secrets.JWT_SECRET }}
        run:
          ./pipeline/helpers/authetication.sh
  
      - name: 'Autenticação'
        if: ${{ github.event.pull_request.base.ref == 'dev'}}
        run: 
-          cat ./secret.key | gpg --with-colons --import-options import-show --dry-run --import
+          echo ./secret.key
 
      - name: 'Autenticação'
        if: ${{ github.event.pull_request.base.ref == 'Release'}}
