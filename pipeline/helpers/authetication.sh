@@ -2,4 +2,4 @@
 
 set -e 
 
-echo "$JWT_SECRET"  > server.key
+echo "$JWT_SECRET"  > secret.key
