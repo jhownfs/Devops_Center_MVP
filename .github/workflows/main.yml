@@ -119,17 +119,14 @@ jobs:
      - name: 'Get Key'
        shell: bash
        env:
-        USERNAME: ${{ secrets.SIT_USERNAME }}
-        KEY: ${{ secrets.SIT_KEY }}
-        URL: ${{ secrets.SDBX_URL }}
-        SECRET: ${{ secrets.JWT_SECRET }}
+        SECRET: ${{ secrets.JWT_SECRET}}
        run:
          ./pipeline/helpers/authetication.sh
  
      - name: 'Autenticação'
        if: ${{ github.event.pull_request.base.ref == 'dev'}}
        run: 
-          echo ./secret.key
+        sf org login jwt --username ${{ secrets.SIT_USERNAME}} --jwt-key-file ./secret.key --client-id ${{ secrets.SIT_KEY}} --alias SFDX  --instance-url ${{ secrets.SDBX_URL}}
 
      - name: 'Autenticação'
        if: ${{ github.event.pull_request.base.ref == 'Release'}}
