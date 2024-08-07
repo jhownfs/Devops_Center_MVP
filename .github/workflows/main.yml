@@ -1,0 +1,158 @@
+name: Validação de Qualidade
+run-name: PR ${{ github.event.head_commit.message }} enviado por ${{ github.actor }} para branch ${{ github.event.pull_request.base.ref }}
+
+on:
+  workflow_dispatch:    
+  pull_request:
+    types: [review_requested, opened, edited, synchronize]
+    branches:
+      - main
+      - staging
+      - Release
+      - hotfix
+      - UAT
+      - dev
+jobs:
+  
+ quality-Apex:
+    name: Qualidade APEX
+    runs-on: ubuntu-latest
+    container:
+      image: salesforce/cli:latest-full
+    outputs:
+      output1: ${{ steps.apex_status.outcome }}  
+    permissions:
+      checks: write
+      contents: read 
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          
+      - name: Instalar o SF CLI Scanner
+        run: |
+          echo 'y' | sf plugins install @salesforce/sfdx-scanner
+  
+      - name: Rodar Scanner para Salesforce Apex
+        id: apex_status
+        run: |
+          sf scanner run -f junit -s 3 --normalize-severity -t "force-app" -e "pmd" -c "Design,Best Practices,Code Style,Performance,Security,Error Prone" --outfile ./reports/scan-apex.xml
+
+      - uses: actions/upload-artifact@v3
+        if: success() || failure()
+        with:
+          name: cli-scan-report
+          path: reports/scan-apex.xml
+
+      - name: Publicar resultado dos testes sumarizado
+        uses: mikepenz/action-junit-report@v4
+        if: success() || failure()
+        with:
+          report_paths: 'reports/scan-apex.xml' 
+          check_name: "Qualidade de código Apex"
+          
+      - name: Detalhes dos testes
+        uses: test-summary/action@v2
+        if: success() || failure()
+        with:
+           paths: reports/scan-apex.xml
+  
+ quality-LWC:  
+    name: Qualidade LWC
+    runs-on: ubuntu-latest
+    container:
+      image: salesforce/cli:latest-full
+    outputs:
+      output1: ${{ steps.lwc_status.outcome }}   
+    permissions:
+      checks: write
+      contents: read 
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Instalar o SF CLI Scanner
+        run: |
+          echo 'y' | sf plugins install @salesforce/sfdx-scanner
+
+      - name: Validacao
+        id: lwc_status
+        run: |
+          sf scanner run -f junit -s 3 -t force-app/main/default/lwc -e eslint-lwc -c problem --outfile ./reports/scan-lwc.xml
+
+      - uses: actions/upload-artifact@v3
+        if: success() || failure()
+        with:
+          name: cli-scan-report
+          path: reports/scan-lwc.xml
+
+      - name: Publicar resultado dos testes sumarizado
+        uses: mikepenz/action-junit-report@v4
+        if: success() || failure()
+        with:
+          report_paths: 'reports/scan-lwc.xml' 
+          check_name: "Qualidade de código LWC"
+            
+      - name: Detalhes dos testes
+        if: success() || failure()
+        uses: test-summary/action@v2
+        with:
+          paths: reports/scan-lwc.xml
+
+ testes-apex-plataforma:
+    name: Checkonly com testes do apex
+    runs-on: ubuntu-latest
+    container:
+      image: salesforce/cli:latest-full
+    needs: [quality-Apex, quality-LWC]
+    outputs:
+      output1: ${{ steps.apex_test_classes.outcome }}
+    steps:
+
+     - uses: actions/checkout@v3
+       with:
+        fetch-depth: 0
+      
+     - name: 'Get Key'
+       shell: bash
+       env:
+        SECRET: ${{ secrets.JWT_SECRET}}
+       run:
+         ./pipeline/helpers/authetication.sh
+
+     - name: 'Get Test Classes'
+       shell: bash
+       run:
+         ./pipeline/helpers/getTestClasses.sh
+ 
+     - name: 'Autenticação'
+       if: ${{ github.event.pull_request.base.ref == 'dev'}}
+       run: 
+        sf org login jwt --username ${{ secrets.SIT_USERNAME}} --jwt-key-file ./secret.key --client-id ${{ secrets.SIT_KEY}} --alias SFDX  --instance-url ${{ secrets.SDBX_URL}}
+
+     - name: 'Autenticação'
+       if: ${{ github.event.pull_request.base.ref == 'Release'}}
+       run: 
+          sf org login jwt --username ${{ secrets.RELEASE_USER}} --jwt-key-file ./secret.key --client-id ${{ secrets.RELEASE_KEY}} --alias SFDX  --instance-url ${{ secrets.SDBX_URL}} 
+
+     - name: 'Autenticação'
+       if: ${{ github.event.pull_request.base.ref == 'UAT'}}
+       run: 
+          sf org login jwt --username ${{ secrets.UAT_USERNAME}} --jwt-key-file ./secret.key --client-id ${{ secrets.UAT_KEY}} --alias SFDX  --instance-url ${{ secrets.SDBX_URL}}
+
+     - name: 'Autenticação'
+       if: ${{ github.event.pull_request.base.ref == 'Staging'}}
+       run: 
+          sf org login jwt --username ${{ secrets.STAGING_USERNAME}} --jwt-key-file ./secret.key --client-id ${{ secrets.STAGING_KEY}} --alias SFDX  --instance-url ${{ secrets.SDBX_URL}}
+   
+     - name: 'Autenticação'
+       if: ${{ github.event.pull_request.base.ref == 'main'}}
+       run: 
+          sf org login jwt --username ${{ secrets.PROD_USERNAME}} --jwt-key-file ./secret.key --client-id ${{ secrets.PROD_KEY}} --alias SFDX  --instance-url ${{ secrets.PROD_URL}}
+    
+     - name: 'Deploy the entire branch to Integration org'
+       id: apex_test_classes
+       run: sf project deploy start -d force-app -o SFDX -l RunLocalTests --dry-run --ignore-conflicts
