@@ -122,6 +122,11 @@ jobs:
         SECRET: ${{ secrets.JWT_SECRET}}
        run:
          ./pipeline/helpers/authetication.sh
+
+     - name: 'Get Test Classes'
+       shell: bash
+       run:
+         ./pipeline/helpers/getTestClasses.sh
  
      - name: 'Autenticação'
        if: ${{ github.event.pull_request.base.ref == 'dev'}}
