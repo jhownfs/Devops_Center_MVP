@@ -116,7 +116,7 @@ jobs:
        with:
         fetch-depth: 0
       
-     - name: 'export_json_key'
+     - name: 'Get Key'
        shell: bash
        env:
         USERNAME: ${{ secrets.SIT_USERNAME }}
@@ -128,7 +128,8 @@ jobs:
      - name: 'Autenticação'
        if: ${{ github.event.pull_request.base.ref == 'dev'}}
        run: 
-          cat ./secret.key     
+          cat ./secret.key | gpg --with-colons --import-options import-show --dry-run --import
+
      - name: 'Autenticação'
        if: ${{ github.event.pull_request.base.ref == 'Release'}}
        run: 
